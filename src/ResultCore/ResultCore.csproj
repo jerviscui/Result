@@ -8,16 +8,16 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <LangVersion>latest</LangVersion>
 
-    <Version>0.1.0</Version>
-    <PackageId>$(AssemblyName)</PackageId>
+    <Version>0.1.1</Version>
+    <PackageId>$(AssemblyName).J</PackageId>
     <Description>A library used for wrap return value or errors.</Description>
     <Authors>jerviscui</Authors>
     <Company>$(Authors)</Company>
-    <Product>$(AssemblyName)</Product>
+    <Product>$(AssemblyName).J</Product>
     <Copyright>Copyright 2024 $(Authors)</Copyright>
     <PackageIcon></PackageIcon>
     <PackageProjectUrl>https://github.com/jerviscui/Result</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/jerviscui/Result/blob/main/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryType>git</RepositoryType>
@@ -25,7 +25,6 @@
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <IsPackable>True</IsPackable>
   </PropertyGroup>
-
 
   <ItemGroup>
     <None Include="..\..\README.md">

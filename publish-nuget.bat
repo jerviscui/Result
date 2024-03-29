@@ -5,7 +5,7 @@
 @echo 1. build
 @cd %curdir%\src
 
-@cd ./RetryCore
+@cd ./ResultCore
 dotnet clean >nul
 dotnet build --configuration Release >nul
 
@@ -16,7 +16,7 @@ dotnet build --configuration Release >nul
 @del /s /q /f *.nupkg >nul 2>nul
 @cd %curdir%\src
 
-@cd ./RetryCore
+@cd ./ResultCore
 dotnet pack -c Release -o %curdir%\nupkgs --no-build >nul
 
 :: publish
