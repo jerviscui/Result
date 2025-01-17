@@ -20,7 +20,7 @@ public interface IError<TError, TCode>
     /// <summary>
     /// Gets or sets the code.
     /// </summary>
-    public TCode Code { get; }
+    public abstract TCode Code { get; }
 
     #endregion
 

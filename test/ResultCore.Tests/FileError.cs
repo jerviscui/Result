@@ -28,17 +28,11 @@ public record FileError : BasicError, IError<FileError, FileErrorCode>
 
     #region IError
 
-    private FileErrorCode _code;
-
     /// <inheritdoc/>
     public new FileErrorCode Code
     {
-        get => _code;
-        internal set
-        {
-            _code = value;
-            base.Code = (int)value;
-        }
+        get => (FileErrorCode)base.Code;
+        internal set => base.Code = (int)value;
     }
 
     /// <inheritdoc/>

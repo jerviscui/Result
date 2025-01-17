@@ -7,17 +7,13 @@ public class FileErrorTest
 
     #region Constants & Statics
 
-    private static Result<MyClass, FileError> Result_Data_Test()
+    private static Result<BasicError> Result_BasicError(FileErrorCode code)
     {
-        var result = FileError.Result();
+        var result = BasicError.Result();
 
-        var i = 1;
-        if (i == 1)
-        {
-            return new MyClass();
-        }
+        var fileError = FileError.Result(code);
 
-        return result;
+        return result.From(fileError);
     }
 
     private static Result<FileError> Result_FileError_Failed()
@@ -30,47 +26,12 @@ public class FileErrorTest
         return Result.Ok;
     }
 
-    private static Result<FileError> Result_FileError_Test()
+    private static Result<MyClass, FileError> ResultData_FileError_Failed()
     {
-        var result = FileError.Result(FileErrorCode.B);
-        //var result = new Result<FileError>(FileErrorCode.B);
+        FileError error = FileErrorCode.B;
+        return error;
 
-        if (result.IsError())
-        {
-            FileError error = FileErrorCode.A;
-            return error;
-        }
-
-        return Result.Ok;
-    }
-
-    private static Result<BasicError> Result_Test(FileErrorCode code)
-    {
-        var result = BasicError.Result();
-
-        var fileError = FileError.Result(code);
-
-        if (fileError.IsError(out var error))
-        {
-            switch (error.Code)
-            {
-                case FileErrorCode.A:
-                    return Result.Ok;
-                case FileErrorCode.B:
-                    break;
-                default:
-                    throw ImpossibleException.Instance;
-            }
-
-            return result.From(fileError);
-        }
-
-        return Result.Ok;
-    }
-
-    private static Result<FileError> ResultData_FileError_Failed()
-    {
-        return FileError.Result(FileErrorCode.B);
+        //return FileError.Result(FileErrorCode.B);
     }
 
     private static Result<MyClass, FileError> ResultData_FileError_Success()
@@ -83,44 +44,49 @@ public class FileErrorTest
     #region Methods
 
     [Fact]
+    public void Result_Error_From_Test()
+    {
+        var errorA = Result_BasicError(FileErrorCode.A);
+        errorA.IsError(out var error).ShouldBeTrue();
+        error.Code.ShouldBe((int)FileErrorCode.A);
+
+        var errorB = Result_BasicError(FileErrorCode.B);
+        errorB.IsError(out error).ShouldBeTrue();
+        error.Code.ShouldBe((int)FileErrorCode.B);
+    }
+
+    [Fact]
     public void Result_FileError_Test()
     {
         var success = Result_FileError_Success();
         success.IsError().ShouldBeFalse();
 
-        var success = Result_FileError_();
-        success.IsError().ShouldBeTrue();
+        var failed = Result_FileError_Failed();
+        failed.IsError().ShouldBeTrue();
 
-        var result = Result_FileError_Test();
-
-        if (result.IsError(out var error))
+        if (failed.IsError(out var err))
         {
-            error.Code.ShouldBe(FileErrorCode.A);
+            err.Code.ShouldBe(FileErrorCode.B);
         }
-
-        var data = Result_Data_Test();
-        data.IsError(out var err, out var my).ShouldBe(false);
-        err.ShouldBeNull();
-        _ = my.ShouldNotBeNull();
     }
 
     [Fact]
-    public void Result_Test_A()
+    public void ResultData_FileError_Test()
     {
-        var result = Result_Test(FileErrorCode.A);
-
-        result.IsError().ShouldBeFalse();
-    }
-
-    [Fact]
-    public void Result_Test_B()
-    {
-        var result = Result_Test(FileErrorCode.B);
-
-        result.IsError().ShouldBeTrue();
-        if (result.IsError(out var error))
+        var success = ResultData_FileError_Success();
+        success.IsError(out _).ShouldBeFalse();
+        if (success.IsError(out var err1, out var data1))
         {
-            error.Code.ShouldBe((int)FileErrorCode.B);
+            err1.ShouldBeNull();
+            return;
+        }
+        _ = data1.ShouldNotBeNull();
+
+        var failed = ResultData_FileError_Failed();
+        if (failed.IsError(out var err2, out var data2))
+        {
+            err2.Code.ShouldBe(FileErrorCode.B);
+            data2.ShouldBeNull();
         }
     }
 
