@@ -4,35 +4,57 @@ namespace ResultCore;
 
 public static class ResultExtensions
 {
-    public static Result<TData, TError> From<TData, TError, TFError>(this Result<TData, TError> result,
-        Result<TFError> other) where TFError : Error where TError : Error, new()
+
+    #region Constants & Statics
+
+    /// <summary>
+    /// Change Error froms the specified other result.
+    /// </summary>
+    /// <typeparam name="TData">The type of the data.</typeparam>
+    /// <typeparam name="TError">The type of the error.</typeparam>
+    /// <typeparam name="TFError">The type of the f error.</typeparam>
+    /// <param name="result">The result.</param>
+    /// <param name="other">The other.</param>
+    /// <returns></returns>
+    public static Result<TData, TError> From<TData, TError, TFError>(
+        this Result<TData, TError> result,
+        Result<TFError> other)
+        where TFError : BasicError
+        where TError : BasicError, new()
     {
-        if (other.Error is null)
-        {
-            throw new NullReferenceException("other is Null.");
-        }
+        var from = other.UnwrapError();
 
         if (result.IsError(out var error))
         {
-            error.From(other.Error);
+            _ = error.From(from);
         }
 
         return result;
     }
 
-    public static Result<TError> From<TError, TFError>(this Result<TError> result,
-        Result<TFError> other) where TFError : Error where TError : Error
+    /// <summary>
+    /// Change Error froms the specified other result.
+    /// </summary>
+    /// <typeparam name="TError">The type of the error.</typeparam>
+    /// <typeparam name="TFError">The type of the f error.</typeparam>
+    /// <param name="result">The result.</param>
+    /// <param name="other">The other.</param>
+    /// <returns></returns>
+    /// <exception cref="NullReferenceException">other is Null.</exception>
+    public static Result<TError> From<TError, TFError>(this Result<TError> result, Result<TFError> other)
+        where TFError : BasicError
+        where TError : BasicError
     {
-        if (other.Error is null)
-        {
-            throw new NullReferenceException("other is Null.");
-        }
+        var from = other.UnwrapError();
 
         if (result.IsError(out var error))
         {
-            error.From(other.Error);
+            _ = error.From(from);
         }
 
         return result;
     }
+
+    #endregion
+
 }

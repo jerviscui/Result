@@ -4,27 +4,13 @@ namespace ResultCore.Tests;
 
 public class ResultTest
 {
-    private Result<Error> Result_Test()
-    {
-        var result = new Result<Error>(new Error(1));
-        result = Error.Result(1);
-        result = Error.Result();
 
-        //fail
-        if (result.IsError())
-        {
-            return result;
-        }
+    #region Constants & Statics
 
-        //success
-        return Result.Ok;
-    }
-
-    private Result<MyClass, Error> Result_Data_Test()
+    private static Result<MyClass, BasicError> Result_Data_Test()
     {
         //var result = new Result<MyClass, Error>(new Error(1));
-        //result = Error.Result();
-        var result = Error.Result();
+        var result = BasicError.Result();
 
         var i = 1;
         if (i == 1)
@@ -36,6 +22,25 @@ public class ResultTest
         //fail
         return result;
     }
+
+    private static Result<BasicError> Result_Test()
+    {
+        //var result = new Result<Error>(new Error(1));
+        var result = BasicError.Result(1);
+
+        //fail
+        if (result.IsError())
+        {
+            return result;
+        }
+
+        //success
+        return Result.Ok;
+    }
+
+    #endregion
+
+    #region Methods
 
     [Fact]
     public void Test()
@@ -51,4 +56,7 @@ public class ResultTest
         err.ShouldBeNull();
         my.ShouldNotBeNull();
     }
+
+    #endregion
+
 }

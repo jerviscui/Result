@@ -1,34 +1,36 @@
 namespace ResultCore.Tests;
 
-internal enum FileErrorCode
+public enum FileErrorCode
 {
     A = 100,
 
     B = 101
 }
 
-internal record FileError : Error, IError<FileError, FileErrorCode>
+public record FileError : BasicError, IError<FileError, FileErrorCode>
 {
+
+    #region Constants & Statics
+
+    public static implicit operator FileError(FileErrorCode errorCode) => new(errorCode);
+
+    #endregion
+
+    public FileError() : this(FileErrorCode.A)
+    {
+    }
+
     public FileError(FileErrorCode code, string? reason = null, Exception? exception = null)
         : base((int)code, reason, exception)
     {
         Code = code;
     }
 
-    public FileError() : this(FileErrorCode.A)
-    {
-    }
-
-    public static implicit operator FileError(FileErrorCode errorCode)
-    {
-        return new FileError(errorCode);
-    }
-
     #region IError
 
     private FileErrorCode _code;
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public new FileErrorCode Code
     {
         get => _code;
@@ -39,17 +41,18 @@ internal record FileError : Error, IError<FileError, FileErrorCode>
         }
     }
 
-    /// <inheritdoc />
-    public static Result<FileError> Result()
+    /// <inheritdoc/>
+    public static new Result<FileError> Result()
     {
         return new FileError();
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public static Result<FileError> Result(FileErrorCode errorCode, string? reason = null, Exception? exception = null)
     {
         return new FileError(errorCode, reason, exception);
     }
 
     #endregion
+
 }

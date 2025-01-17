@@ -1,6 +1,12 @@
 namespace ResultCore.Tests;
 
-internal class MyClass
+internal sealed class MyClass
 {
-    public string Name { get; set; }
+
+    #region Properties
+
+    public string Name { get; set; } = null!;
+
+    #endregion
+
 }

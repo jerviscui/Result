@@ -4,9 +4,49 @@ namespace ResultCore.Tests;
 
 public class FileErrorTest
 {
-    private Result<Error> Result_Test(FileErrorCode code)
+
+    #region Constants & Statics
+
+    private static Result<MyClass, FileError> Result_Data_Test()
     {
-        var result = Error.Result();
+        var result = FileError.Result();
+
+        var i = 1;
+        if (i == 1)
+        {
+            return new MyClass();
+        }
+
+        return result;
+    }
+
+    private static Result<FileError> Result_FileError_Failed()
+    {
+        return FileError.Result(FileErrorCode.B);
+    }
+
+    private static Result<FileError> Result_FileError_Success()
+    {
+        return Result.Ok;
+    }
+
+    private static Result<FileError> Result_FileError_Test()
+    {
+        var result = FileError.Result(FileErrorCode.B);
+        //var result = new Result<FileError>(FileErrorCode.B);
+
+        if (result.IsError())
+        {
+            FileError error = FileErrorCode.A;
+            return error;
+        }
+
+        return Result.Ok;
+    }
+
+    private static Result<BasicError> Result_Test(FileErrorCode code)
+    {
+        var result = BasicError.Result();
 
         var fileError = FileError.Result(code);
 
@@ -19,7 +59,7 @@ public class FileErrorTest
                 case FileErrorCode.B:
                     break;
                 default:
-                    throw ImpossibleExcption.Instance;
+                    throw ImpossibleException.Instance;
             }
 
             return result.From(fileError);
@@ -28,31 +68,40 @@ public class FileErrorTest
         return Result.Ok;
     }
 
-    private Result<FileError> Result_FileError_Test()
+    private static Result<FileError> ResultData_FileError_Failed()
     {
-        var result = FileError.Result();
-        result = new Result<FileError>(FileErrorCode.B);
-
-        if (result.IsError())
-        {
-            FileError error = FileErrorCode.A;
-            return error;
-        }
-
-        return Result.Ok;
+        return FileError.Result(FileErrorCode.B);
     }
 
-    private Result<MyClass, FileError> Result_Data_Test()
+    private static Result<MyClass, FileError> ResultData_FileError_Success()
     {
-        var result = FileError.Result();
+        return new MyClass();
+    }
 
-        var i = 1;
-        if (i == 1)
+    #endregion
+
+    #region Methods
+
+    [Fact]
+    public void Result_FileError_Test()
+    {
+        var success = Result_FileError_Success();
+        success.IsError().ShouldBeFalse();
+
+        var success = Result_FileError_();
+        success.IsError().ShouldBeTrue();
+
+        var result = Result_FileError_Test();
+
+        if (result.IsError(out var error))
         {
-            return new MyClass();
+            error.Code.ShouldBe(FileErrorCode.A);
         }
 
-        return result;
+        var data = Result_Data_Test();
+        data.IsError(out var err, out var my).ShouldBe(false);
+        err.ShouldBeNull();
+        _ = my.ShouldNotBeNull();
     }
 
     [Fact]
@@ -75,19 +124,6 @@ public class FileErrorTest
         }
     }
 
-    [Fact]
-    public void Test()
-    {
-        var result = Result_FileError_Test();
+    #endregion
 
-        if (result.IsError(out var error))
-        {
-            error.Code.ShouldBe(FileErrorCode.A);
-        }
-
-        var data = Result_Data_Test();
-        data.IsError(out var err, out var my).ShouldBe(false);
-        err.ShouldBeNull();
-        my.ShouldNotBeNull();
-    }
 }
