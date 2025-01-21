@@ -7,15 +7,6 @@ public class FileErrorTest
 
     #region Constants & Statics
 
-    private static Result<BasicError> Result_BasicError(FileErrorCode code)
-    {
-        var result = BasicError.Result();
-
-        var fileError = FileError.Result(code);
-
-        return result.From(fileError);
-    }
-
     private static Result<FileError> Result_FileError_Failed()
     {
         return FileError.Result(FileErrorCode.B);
@@ -42,18 +33,6 @@ public class FileErrorTest
     #endregion
 
     #region Methods
-
-    [Fact]
-    public void Result_Error_From_Test()
-    {
-        var errorA = Result_BasicError(FileErrorCode.A);
-        errorA.IsError(out var error).ShouldBeTrue();
-        error.Code.ShouldBe((int)FileErrorCode.A);
-
-        var errorB = Result_BasicError(FileErrorCode.B);
-        errorB.IsError(out error).ShouldBeTrue();
-        error.Code.ShouldBe((int)FileErrorCode.B);
-    }
 
     [Fact]
     public void Result_FileError_Test()

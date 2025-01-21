@@ -36,7 +36,7 @@ public record FileError : BasicError, IError<FileError, FileErrorCode>
     }
 
     /// <inheritdoc/>
-    public static new Result<FileError> Result()
+    public static Result<FileError> Result()
     {
         return new FileError();
     }

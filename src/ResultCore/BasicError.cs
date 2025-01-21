@@ -2,13 +2,16 @@ using System;
 
 namespace ResultCore;
 
-public record BasicError(int Code, string? Reason = null, Exception? Exception = null) : IError<BasicError, int>
+public abstract record BasicError(int Code, string? Reason = null, Exception? Exception = null)
 {
-    public BasicError() : this((int)BasicErrorCode.Failure)
+    protected BasicError() : this((int)BasicErrorCode.Failure)
     {
     }
 
     #region Properties
+
+    /// <inheritdoc/>
+    public virtual int Code { get; protected internal set; } = Code;
 
     /// <summary>
     /// Gets the exception.
@@ -19,25 +22,6 @@ public record BasicError(int Code, string? Reason = null, Exception? Exception =
     /// Gets the reason.
     /// </summary>
     public string? Reason { get; internal set; } = Reason;
-
-    #endregion
-
-    #region IError
-
-    /// <inheritdoc/>
-    public int Code { get; protected internal set; } = Code;
-
-    /// <inheritdoc/>
-    public static Result<BasicError> Result()
-    {
-        return new BasicError();
-    }
-
-    /// <inheritdoc/>
-    public static Result<BasicError> Result(int code, string? reason = null, Exception? exception = null)
-    {
-        return new BasicError(code, reason, exception);
-    }
 
     #endregion
 
