@@ -1,3 +1,4 @@
+using ObjectLayoutInspector;
 using Shouldly;
 
 namespace ResultCore.Tests;
@@ -9,25 +10,82 @@ public class FileErrorTest
 
     private static Result<FileError> Result_FileError_Failed()
     {
-        return FileError.Result(FileErrorCode.B);
+        var result = FileError.Result(FileErrorCode.B);
+
+        TypeLayout.PrintLayout(result.GetType(), true);
+        //Type layout for 'Result`1'
+        //Size: 8 bytes. Paddings: 0 bytes (%0 of empty space)
+        //|===================================================|
+        //|   0-7: FileError <Error>k__BackingField (8 bytes) |
+        //|===================================================|
+
+        return result;
     }
 
     private static Result<FileError> Result_FileError_Success()
     {
-        return Result.Ok;
+        Result<FileError> result = Result.Ok;
+
+        TypeLayout.PrintLayout(result.GetType(), true);
+        //Type layout for 'Result`1'
+        //Size: 8 bytes. Paddings: 0 bytes (%0 of empty space)
+        //|===================================================|
+        //|   0-7: FileError <Error>k__BackingField (8 bytes) |
+        //|===================================================|
+
+        return result;
     }
 
     private static Result<MyClass, FileError> ResultData_FileError_Failed()
     {
-        FileError error = FileErrorCode.B;
-        return error;
+        //FileError error = FileErrorCode.B;
 
-        //return FileError.Result(FileErrorCode.B);
+        Result<MyClass, FileError> error = FileError.Result(FileErrorCode.B);
+
+        TypeLayout.PrintLayout(error.GetType(), true);
+        //Type layout for 'Result`2'
+        //Size: 16 bytes. Paddings: 0 bytes (%0 of empty space)
+        //|===================================================|
+        //|   0-7: MyClass <Data>k__BackingField (8 bytes)    |
+        //|---------------------------------------------------|
+        //|  8-15: FileError <Error>k__BackingField (8 bytes) |
+        //|===================================================|
+
+        return error;
     }
 
     private static Result<MyClass, FileError> ResultData_FileError_Success()
     {
-        return new MyClass();
+        Result<MyClass, FileError> result = new MyClass();
+
+        TypeLayout.PrintLayout(result.GetType(), true);
+        //Type layout for 'Result`2'
+        //Size: 16 bytes. Paddings: 0 bytes (%0 of empty space)
+        //|===================================================|
+        //|   0-7: MyClass <Data>k__BackingField (8 bytes)    |
+        //|---------------------------------------------------|
+        //|  8-15: FileError <Error>k__BackingField (8 bytes) |
+        //|===================================================|
+
+        return result;
+    }
+
+    private static Result<int, FileError> ResultData_Int_Failed()
+    {
+        Result<int, FileError> error = FileError.Result(FileErrorCode.B);
+
+        TypeLayout.PrintLayout(error.GetType(), true);
+        //Type layout for 'Result`2'
+        //Size: 16 bytes. Paddings: 4 bytes (%25 of empty space)
+        //|===================================================|
+        //|   0-7: FileError <Error>k__BackingField (8 bytes) |
+        //|---------------------------------------------------|
+        //|  8-11: Int32 <Data>k__BackingField (4 bytes)      |
+        //|---------------------------------------------------|
+        //| 12-15: padding (4 bytes)                          |
+        //|===================================================|
+
+        return error;
     }
 
     #endregion
@@ -66,6 +124,13 @@ public class FileErrorTest
         {
             err2.Code.ShouldBe(FileErrorCode.B);
             data2.ShouldBeNull();
+        }
+
+        var intFailed = ResultData_Int_Failed();
+        if (intFailed.IsError(out var err3, out var data3))
+        {
+            err3.Code.ShouldBe(FileErrorCode.B);
+            data3.ShouldBe(0);
         }
     }
 

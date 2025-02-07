@@ -9,7 +9,7 @@ namespace ResultCore;
 /// </summary>
 /// <typeparam name="TData">The type of the data.</typeparam>
 /// <typeparam name="TError">The type of the error.</typeparam>
-public record Result<TData, TError>
+public record struct Result<TData, TError>
     where TError : BasicError, new()
 {
 
@@ -27,7 +27,10 @@ public record Result<TData, TError>
 
     #endregion
 
-    private Result() : this(new TError())
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Result{TData, TError}"/> with default <typeparamref name="TError"/>.
+    /// </summary>
+    public Result() : this(new TError())
     {
     }
 
@@ -48,18 +51,18 @@ public record Result<TData, TError>
     /// <summary>
     /// Gets the data.
     /// </summary>
-    public TData? Data { get; init; }
+    public TData? Data { get; private set; }
 
     /// <summary>
     /// Gets the error.
     /// </summary>
-    public TError? Error { get; init; }
+    public TError? Error { get; private set; }
 
     #endregion
 
     #region Methods
 
-    internal TError UnwrapErrorWithoutCheck()
+    internal readonly TError UnwrapErrorWithoutCheck()
     {
         Debug.Assert(Error != null, $"{nameof(Error)} != null");
         return Error;
@@ -71,7 +74,7 @@ public record Result<TData, TError>
     /// <returns>
     /// <c>true</c> if this instance is error, and error must not be null; otherwise <c>false</c>.
     /// </returns>
-    public bool IsError([NotNullWhen(true)] out TError? error)
+    public readonly bool IsError([NotNullWhen(true)] out TError? error)
     {
         return IsError(out error, out _);
     }
@@ -84,7 +87,7 @@ public record Result<TData, TError>
     /// <returns>
     /// <c>true</c> if result is error; otherwise <c>false</c> and the data must not be null.
     /// </returns>
-    public bool IsError([NotNullWhen(true)] out TError? error, [NotNullWhen(false)] out TData? data)
+    public readonly bool IsError([NotNullWhen(true)] out TError? error, [NotNullWhen(false)] out TData? data)
     {
         data = default;
         error = default;
@@ -95,7 +98,9 @@ public record Result<TData, TError>
             return true;
         }
 
+#pragma warning disable S2955 // Generic parameters not constrained to reference types should not be compared to "null"
         Debug.Assert(Data != null, $"{nameof(Data)} != null");
+#pragma warning restore S2955 // Generic parameters not constrained to reference types should not be compared to "null"
         data = Data;
         return false;
     }
@@ -105,7 +110,7 @@ public record Result<TData, TError>
     /// </summary>
     /// <returns></returns>
     /// <exception cref="NullReferenceException">Error is null.</exception>
-    public TError UnwrapError()
+    public readonly TError UnwrapError()
     {
         if (Error is null)
         {
@@ -125,8 +130,8 @@ public record Result<TData, TError>
 /// Wrap the error or return void.
 /// </summary>
 /// <typeparam name="TError">The type of the error.</typeparam>
-public record Result<TError>
-    where TError : BasicError
+public record struct Result<TError>
+    where TError : BasicError, new()
 {
 
     #region Constants & Statics
@@ -134,7 +139,7 @@ public record Result<TError>
     /// <summary>
     /// No errors, just return.
     /// </summary>
-    private static readonly Result<TError> Ok = new();
+    private static readonly Result<TError> Ok = new() { Error = null };
 
     /// <inheritdoc/>
     public static implicit operator Result<TError>(Result _) => Ok;
@@ -144,7 +149,10 @@ public record Result<TError>
 
     #endregion
 
-    private Result()
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Result{TError}"/> with default <typeparamref name="TError"/>.
+    /// </summary>
+    public Result() : this(new TError())
     {
     }
 
@@ -159,13 +167,13 @@ public record Result<TError>
     /// <summary>
     /// Gets the error.
     /// </summary>
-    public TError? Error { get; init; }
+    public TError? Error { get; private set; }
 
     #endregion
 
     #region Methods
 
-    internal TError UnwrapErrorWithoutCheck()
+    internal readonly TError UnwrapErrorWithoutCheck()
     {
         Debug.Assert(Error != null, $"{nameof(Error)} != null");
         return Error;
@@ -177,7 +185,7 @@ public record Result<TError>
     /// <returns>
     /// <c>true</c> if this instance is error; otherwise <c>false</c>.
     /// </returns>
-    public bool IsError()
+    public readonly bool IsError()
     {
         return Error is not null;
     }
@@ -188,7 +196,7 @@ public record Result<TError>
     /// <returns>
     /// <c>true</c> if this instance is error, and error must not be null; otherwise, <c>false</c>.
     /// </returns>
-    public bool IsError([NotNullWhen(true)] out TError? error)
+    public readonly bool IsError([NotNullWhen(true)] out TError? error)
     {
         error = default;
 
@@ -206,7 +214,7 @@ public record Result<TError>
     /// </summary>
     /// <returns></returns>
     /// <exception cref="NullReferenceException">Error is null.</exception>
-    public TError UnwrapError()
+    public readonly TError UnwrapError()
     {
         if (Error is null)
         {

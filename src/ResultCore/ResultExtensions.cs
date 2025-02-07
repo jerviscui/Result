@@ -1,5 +1,8 @@
 namespace ResultCore;
 
+/// <summary>
+/// ResultExtensions
+/// </summary>
 public static class ResultExtensions
 {
 
