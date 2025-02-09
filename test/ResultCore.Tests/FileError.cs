@@ -47,6 +47,15 @@ public record FileError : BasicError, IError<FileError, FileErrorCode>
         return new FileError(errorCode, reason, exception);
     }
 
+    /// <inheritdoc/>
+    public static Result<TData, FileError> Result<TData>(
+        FileErrorCode errorCode,
+        string? reason = null,
+        Exception? exception = null)
+    {
+        return new FileError(errorCode, reason, exception);
+    }
+
     #endregion
 
 }
