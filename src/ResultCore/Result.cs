@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.InteropServices;
 
 namespace ResultCore;
 
@@ -9,6 +10,7 @@ namespace ResultCore;
 /// </summary>
 /// <typeparam name="TData">The type of the data.</typeparam>
 /// <typeparam name="TError">The type of the error.</typeparam>
+[StructLayout(LayoutKind.Auto)]
 public record struct Result<TData, TError>
     where TError : BasicError, new()
 {
@@ -130,6 +132,7 @@ public record struct Result<TData, TError>
 /// Wrap the error or return void.
 /// </summary>
 /// <typeparam name="TError">The type of the error.</typeparam>
+[StructLayout(LayoutKind.Auto)]
 public record struct Result<TError>
     where TError : BasicError, new()
 {
