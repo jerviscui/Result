@@ -7,43 +7,16 @@ public class ResultTaskTest
 
     #region Constants & Statics
 
-    private static Result<MyClass, BaseError> ResultData_Success_Test()
+    private static async ResultTask<BaseError> ResultTask_Error_Async()
     {
-        //var result = new Result<MyClass, Error>(new Error(1));
-        var result = BaseError.Result();
+        await Task.Delay(10000);
 
-        var i = 1;
-        if (i == 1)
-        {
-            //success
-            return new MyClass();
-        }
-
-        //fail
-        return result;
+        return new BaseError(BaseErrorCode.NotFound);
     }
 
-    private static ResultTask<BaseError> ResultTask_Error_Sync_Test()
+    private static ResultTask<BaseError> ResultTask_Error_Sync()
     {
         return BaseError.Result(BaseErrorCode.NotFound, null, null);
-    }
-
-    private static async ResultTask<BaseError> ResultTask_Error_TestAsync()
-    {
-        await Task.Delay(1);
-
-        return new BaseError();
-
-        //return new Result<BaseError>();
-    }
-
-    private static async ValueTask<BaseError> ResultTask_Error2_TestAsync()
-    {
-        await Task.Delay(1);
-
-        return new BaseError();
-
-        //return new ValueTask<BaseError>(new BaseError()); //cs4016
     }
 
     #endregion
@@ -51,27 +24,25 @@ public class ResultTaskTest
     #region Methods
 
     [Fact]
-    public async Task TestAsync()
+    public async Task ResultTask_Error_TestAsync()
     {
-        //var a = await ResultTask_Error2_TestAsync();
-
-        //var syncResult = await ResultTask_Error_Sync_Test();
-        //if (syncResult.IsError())
-        //{
-        //    syncResult.UnwrapError().Code.ShouldBe(BaseErrorCode.NotFound);
-        //}
-
-        var result = await ResultTask_Error_TestAsync();
+        var result = await ResultTask_Error_Sync();
 
         if (result.IsError())
         {
             result.UnwrapError().Code.ShouldBe(BaseErrorCode.NotFound);
         }
+    }
 
-        //var data = ResultData_Success_Test();
-        //data.IsError(out var err, out var my).ShouldBe(false);
-        //err.ShouldBeNull();
-        //_ = my.ShouldNotBeNull();
+    [Fact]
+    public async Task ResultTask_ErrorAsync_TestAsync()
+    {
+        var result = await ResultTask_Error_Async();
+
+        if (result.IsError())
+        {
+            result.UnwrapError().Code.ShouldBe(BaseErrorCode.NotFound);
+        }
     }
 
     #endregion
