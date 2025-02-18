@@ -37,7 +37,7 @@ public readonly record struct ResultTask<TError>
 
     #endregion
 
-    internal ResultTask(ValueTask<Result<TError>> task)
+    internal ResultTask(ref ValueTask<Result<TError>> task)
     {
         _task = task;
     }
@@ -72,9 +72,7 @@ public readonly record struct ResultTask<TError>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ValueTaskAwaiter<Result<TError>> GetAwaiter()
     {
-        // BUG: fix loop
         return _task.GetAwaiter();
-        //return new ValueTaskAwaiter<Result<TError>>();
     }
 
     /// <summary>Configures an awaiter for this <see cref="ValueTask{TResult}"/>.</summary>
@@ -115,6 +113,7 @@ public readonly record struct ResultTask<TError>
 
 }
 
+// TODO: use struct
 [SuppressMessage("Members", "CRR0026:Unused member", Justification = "<Pending>")]
 public class AsyncResultTaskMethodBuilder<TResult>
     where TResult : BasicError, new()
@@ -129,14 +128,14 @@ public class AsyncResultTaskMethodBuilder<TResult>
     {
         var builder = AsyncValueTaskMethodBuilder<Result<TResult>>.Create();
 
-        return new AsyncResultTaskMethodBuilder<TResult>(builder);
+        return new AsyncResultTaskMethodBuilder<TResult>(ref builder);
     }
 
     #endregion
 
-    private readonly AsyncValueTaskMethodBuilder<Result<TResult>> _builder;
+    private AsyncValueTaskMethodBuilder<Result<TResult>> _builder;
 
-    public AsyncResultTaskMethodBuilder(AsyncValueTaskMethodBuilder<Result<TResult>> builder)
+    public AsyncResultTaskMethodBuilder(ref AsyncValueTaskMethodBuilder<Result<TResult>> builder)
     {
         _builder = builder;
     }
@@ -144,7 +143,15 @@ public class AsyncResultTaskMethodBuilder<TResult>
     #region Properties
 
     // 5. 作为 async 方法的返回值
-    public ResultTask<TResult> Task => new(_builder.Task);
+    public ResultTask<TResult> Task
+    {
+        get
+        {
+            //! 3. 此时获取 ValueTask<>.m_task，或者 ValueTask<>._result
+            var task = _builder.Task;
+            return new(ref task);
+        }
+    }
 
     #endregion
 
@@ -163,6 +170,7 @@ public class AsyncResultTaskMethodBuilder<TResult>
         where TAwaiter : ICriticalNotifyCompletion
         where TStateMachine : IAsyncStateMachine
     {
+        //! 1. 异步执行时，此处会修改 m_task，AsyncTaskMethodBuilder<>.GetStateMachineBox()
         _builder.AwaitUnsafeOnCompleted(ref awaiter, ref stateMachine);
     }
 
@@ -175,6 +183,7 @@ public class AsyncResultTaskMethodBuilder<TResult>
     // 8. SetResult
     public void SetResult(TResult result)
     {
+        //! 1. 如果同步执行，此处会修改 _result
         _builder.SetResult(result);
     }
 
