@@ -113,11 +113,12 @@ public readonly record struct ResultTask<TError>
 
 }
 
-// TODO: use struct
 [SuppressMessage("Members", "CRR0026:Unused member", Justification = "<Pending>")]
-public class AsyncResultTaskMethodBuilder<TResult>
+[StructLayout(LayoutKind.Auto)]
+public struct AsyncResultTaskMethodBuilder<TResult>
     where TResult : BasicError, new()
 {
+    private AsyncValueTaskMethodBuilder<Result<TResult>> _builder;
 
     #region Constants & Statics
 
@@ -133,8 +134,6 @@ public class AsyncResultTaskMethodBuilder<TResult>
 
     #endregion
 
-    private AsyncValueTaskMethodBuilder<Result<TResult>> _builder;
-
     public AsyncResultTaskMethodBuilder(ref AsyncValueTaskMethodBuilder<Result<TResult>> builder)
     {
         _builder = builder;
@@ -147,7 +146,6 @@ public class AsyncResultTaskMethodBuilder<TResult>
     {
         get
         {
-            //! 3. 此时获取 ValueTask<>.m_task，或者 ValueTask<>._result
             var task = _builder.Task;
             return new(ref task);
         }
@@ -170,7 +168,6 @@ public class AsyncResultTaskMethodBuilder<TResult>
         where TAwaiter : ICriticalNotifyCompletion
         where TStateMachine : IAsyncStateMachine
     {
-        //! 1. 异步执行时，此处会修改 m_task，AsyncTaskMethodBuilder<>.GetStateMachineBox()
         _builder.AwaitUnsafeOnCompleted(ref awaiter, ref stateMachine);
     }
 
@@ -183,14 +180,11 @@ public class AsyncResultTaskMethodBuilder<TResult>
     // 8. SetResult
     public void SetResult(TResult result)
     {
-        //! 1. 如果同步执行，此处会修改 _result
         _builder.SetResult(result);
     }
 
     // 6. 绑定状态机，但编译器的编译结果不会调用
-#pragma warning disable IDE0060 // Remove unused parameter
     public void SetStateMachine(IAsyncStateMachine stateMachine)
-#pragma warning restore IDE0060 // Remove unused parameter
     {
         _builder.SetStateMachine(stateMachine);
     }
