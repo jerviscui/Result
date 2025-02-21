@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace ResultCore;
 
 /// <summary>
@@ -25,8 +27,33 @@ public static class ResultExtensions
         {
             _ = error.From(from);
         }
-
         return result;
+    }
+
+    /// <summary>
+    /// Sequences the specified results.
+    /// </summary>
+    /// <typeparam name="TData">The type of the data.</typeparam>
+    /// <typeparam name="TError">The type of the error.</typeparam>
+    /// <param name="results">The results.</param>
+    /// <returns></returns>
+    public static Result<IEnumerable<TData>, TError> Sequence<TData, TError>(
+        this IEnumerable<Result<TData, TError>> results)
+        where TError : BasicError, new()
+    {
+        var list = new List<TData>();
+
+        foreach (var item in results)
+        {
+            if (item.IsError(out var error, out var data))
+            {
+                return error;
+            }
+
+            list.Add(data);
+        }
+
+        return list;
     }
 
     #endregion
