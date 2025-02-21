@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ResultCore;
 
@@ -44,6 +45,32 @@ public static class ResultExtensions
         var list = new List<TData>();
 
         foreach (var item in results)
+        {
+            if (item.IsError(out var error, out var data))
+            {
+                return error;
+            }
+
+            list.Add(data);
+        }
+
+        return list;
+    }
+
+    /// <summary>
+    /// Sequences the specified results.
+    /// </summary>
+    /// <typeparam name="TData">The type of the data.</typeparam>
+    /// <typeparam name="TError">The type of the error.</typeparam>
+    /// <param name="results">The results.</param>
+    /// <returns></returns>
+    public static async Task<Result<IEnumerable<TData>, TError>> SequenceAsync<TData, TError>(
+        this IAsyncEnumerable<Result<TData, TError>> results)
+        where TError : BasicError, new()
+    {
+        var list = new List<TData>();
+
+        await foreach (var item in results)
         {
             if (item.IsError(out var error, out var data))
             {
