@@ -2,12 +2,14 @@ namespace ResultCore.Tests;
 
 public enum FileErrorCode
 {
+    Failure = 0,
+
     A = 100,
 
     B = 101
 }
 
-public record FileError : BasicError, IError<FileError, FileErrorCode>
+public sealed record FileError : BasicError, IError<FileError, FileErrorCode>
 {
 
     #region Constants & Statics

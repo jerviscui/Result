@@ -2,12 +2,14 @@ namespace ResultCore.Tests;
 
 public enum BaseErrorCode
 {
+    Failure = 0,
+
     Failed = 10,
 
     NotFound = 99
 }
 
-public record BaseError : BasicError, IError<BaseError, BaseErrorCode>
+public sealed record BaseError : BasicError, IError<BaseError, BaseErrorCode>
 {
 
     #region Constants & Statics

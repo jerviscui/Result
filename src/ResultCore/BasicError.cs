@@ -2,6 +2,9 @@ using System;
 
 namespace ResultCore;
 
+/// <summary>
+/// Define error type
+/// </summary>
 public abstract record BasicError(int Code, string? Reason = null, Exception? Exception = null)
 {
     protected BasicError() : this((int)BasicErrorCode.Failure)
@@ -10,7 +13,9 @@ public abstract record BasicError(int Code, string? Reason = null, Exception? Ex
 
     #region Properties
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Gets the error code.
+    /// </summary>
     public virtual int Code { get; protected internal set; } = Code;
 
     /// <summary>

@@ -6,12 +6,11 @@ public static class ErrorExtensions
     #region Constants & Statics
 
     /// <summary>
-    /// Change Error froms the specified other error.
+    /// Change error froms the specified other error.
     /// </summary>
     /// <typeparam name="TError">The type of the error.</typeparam>
     /// <param name="error">The error.</param>
     /// <param name="other">The other.</param>
-    /// <returns></returns>
     internal static TError From<TError>(this TError error, TError other)
         where TError : BasicError
     {

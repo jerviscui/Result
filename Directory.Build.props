@@ -1,0 +1,8 @@
+<Project>
+
+  <PropertyGroup>
+    <UseArtifactsOutput>true</UseArtifactsOutput>
+    <AnalysisMode>All</AnalysisMode>
+  </PropertyGroup>
+
+</Project>

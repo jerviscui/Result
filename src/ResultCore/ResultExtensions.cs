@@ -18,14 +18,12 @@ public static class ResultExtensions
     /// <typeparam name="TError">The type of the error.</typeparam>
     /// <param name="result">The result.</param>
     /// <param name="other">The other.</param>
-    /// <returns></returns>
     public static Result<TData, TError> From<TData, TError>(this Result<TData, TError> result, Result<TError> other)
         where TError : BasicError, new()
     {
-        var from = other.UnwrapError();
-
         if (result.IsError(out var error))
         {
+            var from = other.UnwrapError();
             _ = error.From(from);
         }
         return result;
@@ -37,7 +35,6 @@ public static class ResultExtensions
     /// <typeparam name="TData">The type of the data.</typeparam>
     /// <typeparam name="TError">The type of the error.</typeparam>
     /// <param name="results">The results.</param>
-    /// <returns></returns>
     public static Result<IEnumerable<TData>, TError> Sequence<TData, TError>(
         this IEnumerable<Result<TData, TError>> results)
         where TError : BasicError, new()
@@ -63,7 +60,6 @@ public static class ResultExtensions
     /// <typeparam name="TData">The type of the data.</typeparam>
     /// <typeparam name="TError">The type of the error.</typeparam>
     /// <param name="results">The results.</param>
-    /// <returns></returns>
     public static async Task<Result<IEnumerable<TData>, TError>> SequenceAsync<TData, TError>(
         this IAsyncEnumerable<Result<TData, TError>> results)
         where TError : BasicError, new()
