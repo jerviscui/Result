@@ -15,26 +15,39 @@ public class FileErrorTest
         TypeLayout.PrintLayout(result.GetType(), true);
         //Type layout for 'Result`1'
         //Size: 8 bytes. Paddings: 0 bytes (%0 of empty space)
-        //|===================================================|
-        //|   0-7: FileError <Error>k__BackingField (8 bytes) |
-        //|===================================================|
+        //|===================================|
+        //|   0-7: Nullable`1 Error (8 bytes) |
+        //|===================================|
 
+        //TypeLayout.PrintLayout<FileError?>(true);
+        TypeLayout.PrintLayout(result.Error!.GetType(), true);
+        //Type layout for 'FileError'
+        //Size: 4 bytes. Paddings: 0 bytes (%0 of empty space)
+        //|======================================================|
+        //|   0-3: FileErrorCode <Code>k__BackingField (4 bytes) |
+        //| |================================|                   |
+        //| |   0-3: Int32 value__ (4 bytes) |                   |
+        //| |================================|                   |
+        //|======================================================|
+
+        var r2 = BaseError.Result(BaseErrorCode.NotFound);
+        TypeLayout.PrintLayout(r2.GetType(), true);
         //Type layout for 'Result`1'
         //Size: 32 bytes. Paddings: 0 bytes (%0 of empty space)
         //|====================================|
         //|  0-31: Nullable`1 Error (32 bytes) |
         //|====================================|
 
-        TypeLayout.PrintLayout(result.UnwrapError().GetType(), true);
-
-        //Type layout for 'FileError'
+        //TypeLayout.PrintLayout<BaseError?>(true);
+        TypeLayout.PrintLayout(r2.Error!.GetType(), true);
+        //Type layout for 'BaseError'
         //Size: 24 bytes. Paddings: 4 bytes (%16 of empty space)
         //|=======================================================|
         //|   0-7: String <Reason>k__BackingField (8 bytes)       |
         //|-------------------------------------------------------|
         //|  8-15: Exception <Exception>k__BackingField (8 bytes) |
         //|-------------------------------------------------------|
-        //| 16-19: FileErrorCode <Code>k__BackingField (4 bytes)  |
+        //| 16-19: BaseErrorCode <Code>k__BackingField (4 bytes)  |
         //| |================================|                    |
         //| |   0-3: Int32 value__ (4 bytes) |                    |
         //| |================================|                    |
@@ -52,27 +65,63 @@ public class FileErrorTest
         TypeLayout.PrintLayout(result.GetType(), true);
         //Type layout for 'Result`1'
         //Size: 8 bytes. Paddings: 0 bytes (%0 of empty space)
-        //|===================================================|
-        //|   0-7: FileError <Error>k__BackingField (8 bytes) |
-        //|===================================================|
+        //|===================================|
+        //|   0-7: Nullable`1 Error (8 bytes) |
+        //|===================================|
 
         return result;
     }
 
     private static Result<MyClass, FileError> ResultData_FileError_Failed()
     {
-        //FileError error = FileErrorCode.B;
-
         Result<MyClass, FileError> error = FileError.Result(FileErrorCode.B);
 
         TypeLayout.PrintLayout(error.GetType(), true);
         //Type layout for 'Result`2'
         //Size: 16 bytes. Paddings: 0 bytes (%0 of empty space)
-        //|===================================================|
-        //|   0-7: MyClass <Data>k__BackingField (8 bytes)    |
-        //|---------------------------------------------------|
-        //|  8-15: FileError <Error>k__BackingField (8 bytes) |
-        //|===================================================|
+        //|===================================|
+        //|   0-7: MyClass Data (8 bytes)     |
+        //|-----------------------------------|
+        //|  8-15: Nullable`1 Error (8 bytes) |
+        //|===================================|
+
+        //TypeLayout.PrintLayout<FileError?>(true);
+        TypeLayout.PrintLayout(error.Error!.GetType(), true);
+        //Type layout for 'FileError'
+        //Size: 4 bytes. Paddings: 0 bytes (%0 of empty space)
+        //|======================================================|
+        //|   0-3: FileErrorCode <Code>k__BackingField (4 bytes) |
+        //| |================================|                   |
+        //| |   0-3: Int32 value__ (4 bytes) |                   |
+        //| |================================|                   |
+        //|======================================================|
+
+        Result<MyClass, BaseError> r2 = BaseError.Result(BaseErrorCode.NotFound);
+        TypeLayout.PrintLayout(r2.GetType(), true);
+        //Type layout for 'Result`2'
+        //Size: 40 bytes. Paddings: 0 bytes (%0 of empty space)
+        //|====================================|
+        //|   0-7: MyClass Data (8 bytes)      |
+        //|------------------------------------|
+        //|  8-39: Nullable`1 Error (32 bytes) |
+        //|====================================|
+
+        //TypeLayout.PrintLayout<BaseError?>(true);
+        TypeLayout.PrintLayout(r2.Error!.GetType(), true);
+        //Type layout for 'BaseError'
+        //Size: 24 bytes. Paddings: 4 bytes (%16 of empty space)
+        //|=======================================================|
+        //|   0-7: String <Reason>k__BackingField (8 bytes)       |
+        //|-------------------------------------------------------|
+        //|  8-15: Exception <Exception>k__BackingField (8 bytes) |
+        //|-------------------------------------------------------|
+        //| 16-19: BaseErrorCode <Code>k__BackingField (4 bytes)  |
+        //| |================================|                    |
+        //| |   0-3: Int32 value__ (4 bytes) |                    |
+        //| |================================|                    |
+        //|-------------------------------------------------------|
+        //| 20-23: padding (4 bytes)                              |
+        //|=======================================================|
 
         return error;
     }
@@ -84,11 +133,11 @@ public class FileErrorTest
         TypeLayout.PrintLayout(result.GetType(), true);
         //Type layout for 'Result`2'
         //Size: 16 bytes. Paddings: 0 bytes (%0 of empty space)
-        //|===================================================|
-        //|   0-7: MyClass <Data>k__BackingField (8 bytes)    |
-        //|---------------------------------------------------|
-        //|  8-15: FileError <Error>k__BackingField (8 bytes) |
-        //|===================================================|
+        //|===================================|
+        //|   0-7: MyClass Data (8 bytes)     |
+        //|-----------------------------------|
+        //|  8-15: Nullable`1 Error (8 bytes) |
+        //|===================================|
 
         return result;
     }
@@ -100,13 +149,13 @@ public class FileErrorTest
         TypeLayout.PrintLayout(error.GetType(), true);
         //Type layout for 'Result`2'
         //Size: 16 bytes. Paddings: 4 bytes (%25 of empty space)
-        //|===================================================|
-        //|   0-7: FileError <Error>k__BackingField (8 bytes) |
-        //|---------------------------------------------------|
-        //|  8-11: Int32 <Data>k__BackingField (4 bytes)      |
-        //|---------------------------------------------------|
-        //| 12-15: padding (4 bytes)                          |
-        //|===================================================|
+        //|===================================|
+        //|   0-3: Int32 Data (4 bytes)       |
+        //|-----------------------------------|
+        //|  4-11: Nullable`1 Error (8 bytes) |
+        //|-----------------------------------|
+        //| 12-15: padding (4 bytes)          |
+        //|===================================|
 
         return error;
     }
