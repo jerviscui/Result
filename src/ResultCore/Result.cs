@@ -117,7 +117,7 @@ public readonly record struct Result<TData, TError>
     /// <exception cref="InvalidOperationException">Error is null.</exception>
     public readonly TError UnwrapError()
     {
-        return Error!.Value!;
+        return Error!.Value;
     }
 
     #endregion
@@ -226,7 +226,7 @@ public readonly record struct Result<TError>
     /// <exception cref="InvalidOperationException">Error is null.</exception>
     public readonly TError UnwrapError()
     {
-        return Error!.Value!;
+        return Error!.Value;
     }
 
     #endregion

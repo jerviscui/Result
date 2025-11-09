@@ -14,10 +14,9 @@ public class ResultTest
         // way 2
         //var result = new Result<BaseError>(new BaseError(BaseErrorCode.NotFound));
         // way 3
-        var result = BaseError.Result(BaseErrorCode.NotFound);
-
+        //var result = BaseError.Result(BaseErrorCode.NotFound);
         // way 4
-        //BaseError result = BaseErrorCode.NotFound;
+        BaseError result = BaseErrorCode.NotFound;
 
         return result;
     }
@@ -34,9 +33,9 @@ public class ResultTest
         // way 2
         //var result = new Result<BaseError>(new BaseError(BaseErrorCode.NotFound));
         // way 3
-        var result = BaseError.Result(BaseErrorCode.NotFound);
+        //var result = BaseError.Result(BaseErrorCode.NotFound);
         // way 4
-        //BaseError result = BaseErrorCode.NotFound;
+        BaseError result = BaseErrorCode.NotFound;
 
         return result;
     }

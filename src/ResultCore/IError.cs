@@ -1,5 +1,3 @@
-using System;
-
 namespace ResultCore;
 
 public interface IError<TError, TCode>
@@ -14,12 +12,9 @@ public interface IError<TError, TCode>
     public static abstract Result<TError> Result();
 
     /// <summary>
-    /// Create a result with the specified code, reason and exception.
+    /// Create a result with the specified code.
     /// </summary>
-    /// <param name="code">The code.</param>
-    /// <param name="reason">The reason.</param>
-    /// <param name="exception">The exception.</param>
-    public static abstract Result<TError> Result(TCode code, string? reason = null, Exception? exception = null);
+    public static abstract Result<TError> Result(TCode code);
 
     #endregion
 
@@ -29,16 +24,6 @@ public interface IError<TError, TCode>
     /// Gets the error code.
     /// </summary>
     public TCode Code { get; }
-
-    /// <summary>
-    /// Gets the exception.
-    /// </summary>
-    public Exception? Exception { get; }
-
-    /// <summary>
-    /// Gets the reason.
-    /// </summary>
-    public string? Reason { get; }
 
     #endregion
 

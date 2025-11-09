@@ -9,8 +9,7 @@ public enum FileErrorCode
     B = 101
 }
 
-public readonly record struct FileError(FileErrorCode Code, string? Reason = null, Exception? Exception = null)
-    : IError<FileError, FileErrorCode>
+public readonly record struct FileError(FileErrorCode Code) : IError<FileError, FileErrorCode>
 {
     public FileError() : this(FileErrorCode.A)
     {
@@ -20,12 +19,12 @@ public readonly record struct FileError(FileErrorCode Code, string? Reason = nul
 
     public static Result<FileError> Result()
     {
-        return new();
+        return new FileError();
     }
 
-    public static Result<FileError> Result(FileErrorCode code, string? reason = null, Exception? exception = null)
+    public static Result<FileError> Result(FileErrorCode code)
     {
-        return new FileError(code, reason, exception);
+        return new FileError(code);
     }
 
     #endregion
