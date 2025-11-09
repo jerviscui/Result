@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ResultCore;
@@ -12,24 +13,6 @@ public static class ResultExtensions
     #region Constants & Statics
 
     /// <summary>
-    /// Change Error froms the specified other result.
-    /// </summary>
-    /// <typeparam name="TData">The type of the data.</typeparam>
-    /// <typeparam name="TError">The type of the error.</typeparam>
-    /// <param name="result">The result.</param>
-    /// <param name="other">The other.</param>
-    public static Result<TData, TError> From<TData, TError>(this Result<TData, TError> result, Result<TError> other)
-        where TError : BasicError, new()
-    {
-        if (result.IsError(out var error))
-        {
-            var from = other.UnwrapError();
-            _ = error.From(from);
-        }
-        return result;
-    }
-
-    /// <summary>
     /// Sequences the specified results.
     /// </summary>
     /// <typeparam name="TData">The type of the data.</typeparam>
@@ -37,7 +20,7 @@ public static class ResultExtensions
     /// <param name="results">The results.</param>
     public static Result<IEnumerable<TData>, TError> Sequence<TData, TError>(
         this IEnumerable<Result<TData, TError>> results)
-        where TError : BasicError, new()
+        where TError : struct
     {
         var list = new List<TData>();
 
@@ -45,7 +28,7 @@ public static class ResultExtensions
         {
             if (item.IsError(out var error, out var data))
             {
-                return error;
+                return error.Value;
             }
 
             list.Add(data);
@@ -61,16 +44,17 @@ public static class ResultExtensions
     /// <typeparam name="TError">The type of the error.</typeparam>
     /// <param name="results">The results.</param>
     public static async Task<Result<IEnumerable<TData>, TError>> SequenceAsync<TData, TError>(
-        this IAsyncEnumerable<Result<TData, TError>> results)
-        where TError : BasicError, new()
+        this IAsyncEnumerable<Result<TData, TError>> results,
+        CancellationToken cancellationToken = default)
+        where TError : struct
     {
         var list = new List<TData>();
 
-        await foreach (var item in results)
+        await foreach (var item in results.WithCancellation(cancellationToken))
         {
             if (item.IsError(out var error, out var data))
             {
-                return error;
+                return error.Value;
             }
 
             list.Add(data);

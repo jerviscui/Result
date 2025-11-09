@@ -9,46 +9,26 @@ public enum BaseErrorCode
     NotFound = 99
 }
 
-public sealed record BaseError : BasicError, IError<BaseError, BaseErrorCode>
+public readonly record struct BaseError(BaseErrorCode Code, string? Reason = null, Exception? Exception = null)
+    : IError<BaseError, BaseErrorCode>
 {
-
-    #region Constants & Statics
-
-    public static implicit operator BaseError(BaseErrorCode errorCode) => new(errorCode);
-
-    #endregion
-
     public BaseError() : this(BaseErrorCode.Failed)
     {
     }
 
-    public BaseError(BaseErrorCode code, string? reason = null, Exception? exception = null)
-        : base((int)code, reason, exception)
-    {
-        Code = code;
-    }
+    #region IError implementations
 
-    #region IError
-
-    /// <inheritdoc/>
-    public new BaseErrorCode Code
-    {
-        get => (BaseErrorCode)base.Code;
-        internal set => base.Code = (int)value;
-    }
-
-    /// <inheritdoc/>
     public static Result<BaseError> Result()
     {
         return new BaseError();
     }
 
-    /// <inheritdoc/>
-    public static Result<BaseError> Result(BaseErrorCode errorCode, string? reason = null, Exception? exception = null)
+    public static Result<BaseError> Result(BaseErrorCode code, string? reason = null, Exception? exception = null)
     {
-        return new BaseError(errorCode, reason, exception);
+        return new BaseError(code, reason, exception);
     }
 
     #endregion
 
+    public static implicit operator BaseError(BaseErrorCode errorCode) => new(errorCode);
 }

@@ -10,32 +10,15 @@ namespace ResultCore;
 /// Wrap the error or return void.
 /// </summary>
 [SuppressMessage(
-    "Async/await",
-    "CRR0034:An asynchronous method's name is missing an 'Async' suffix",
-    Justification = "<Pending>")]
-[SuppressMessage(
-    "Async/await",
-    "CRR0035:No CancellationToken parameter in the asynchronous method",
+    "Minor Code Smell",
+    "S4261:Methods should be named according to their synchronicities",
     Justification = "<Pending>")]
 [AsyncMethodBuilder(typeof(AsyncResultTaskMethodBuilder<>))]
 [StructLayout(LayoutKind.Auto)]
 public readonly record struct ResultTask<TError>
-    where TError : BasicError, new()
+    where TError : struct
 {
     private readonly ValueTask<Result<TError>> _task;
-
-    #region Constants & Statics
-
-    /// <inheritdoc/>
-    public static implicit operator ResultTask<TError>(Result _) => new(Result.Ok);
-
-    /// <inheritdoc/>
-    public static implicit operator ResultTask<TError>(TError error) => new(error);
-
-    /// <inheritdoc/>
-    public static implicit operator ResultTask<TError>(Result<TError> result) => new(result);
-
-    #endregion
 
     internal ResultTask(ref ValueTask<Result<TError>> task)
     {
@@ -49,22 +32,25 @@ public readonly record struct ResultTask<TError>
     {
     }
 
-    /// <inheritdoc/>
     public ResultTask(TError error) : this(new Result<TError>(error))
     {
     }
 
-    /// <inheritdoc/>
     public ResultTask(Result<TError> result)
     {
         _task = new ValueTask<Result<TError>>(result);
     }
 
-    /// <inheritdoc/>
     public ResultTask(Task<Result<TError>> task)
     {
         _task = new ValueTask<Result<TError>>(task);
     }
+
+    public static implicit operator ResultTask<TError>(Result _) => new(Result.Ok);
+
+    public static implicit operator ResultTask<TError>(TError error) => new(error);
+
+    public static implicit operator ResultTask<TError>(Result<TError> result) => new(result);
 
     #region Await Support
 
@@ -113,12 +99,18 @@ public readonly record struct ResultTask<TError>
 
 }
 
-[SuppressMessage("Members", "CRR0026:Unused member", Justification = "<Pending>")]
+[SuppressMessage(
+    "Major Code Smell",
+    "S3898:Value types should implement \"IEquatable<T>\"",
+    Justification = "<Pending>")]
+[SuppressMessage(
+    "Critical Code Smell",
+    "S3874:\"out\" and \"ref\" parameters should not be used",
+    Justification = "<Pending>")]
 [StructLayout(LayoutKind.Auto)]
 public struct AsyncResultTaskMethodBuilder<TResult>
-    where TResult : BasicError, new()
+    where TResult : struct
 {
-    private AsyncValueTaskMethodBuilder<Result<TResult>> _builder;
 
     #region Constants & Statics
 
@@ -133,6 +125,8 @@ public struct AsyncResultTaskMethodBuilder<TResult>
     }
 
     #endregion
+
+    private AsyncValueTaskMethodBuilder<Result<TResult>> _builder;
 
     public AsyncResultTaskMethodBuilder(ref AsyncValueTaskMethodBuilder<Result<TResult>> builder)
     {

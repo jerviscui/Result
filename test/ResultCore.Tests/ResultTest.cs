@@ -7,35 +7,43 @@ public class ResultTest
 
     #region Constants & Statics
 
-    private static Result<BaseError> Result_Error_Test()
+    private static Result<BaseError> Return_Result_Error_Test()
     {
-        //var result = new Result<Error>(new Error(1));
+        // way 1
+        //var result = new Result<BaseError>(BaseErrorCode.NotFound);
+        // way 2
+        //var result = new Result<BaseError>(new BaseError(BaseErrorCode.NotFound));
+        // way 3
         var result = BaseError.Result(BaseErrorCode.NotFound);
 
-        //fail
-        if (result.IsError())
-        {
-            return result;
-        }
+        // way 4
+        //BaseError result = BaseErrorCode.NotFound;
 
-        //success
+        return result;
+    }
+
+    private static Result<BaseError> Return_Result_Ok_Test()
+    {
         return Result.Ok;
     }
 
-    private static Result<MyClass, BaseError> ResultData_Success_Test()
+    private static Result<MyClass, BaseError> Return_ResultData_Error_Test()
     {
-        //var result = new Result<MyClass, Error>(new Error(1));
-        var result = BaseError.Result();
+        // way 1
+        //var result = new Result<BaseError>(BaseErrorCode.NotFound);
+        // way 2
+        //var result = new Result<BaseError>(new BaseError(BaseErrorCode.NotFound));
+        // way 3
+        var result = BaseError.Result(BaseErrorCode.NotFound);
+        // way 4
+        //BaseError result = BaseErrorCode.NotFound;
 
-        var i = 1;
-        if (i == 1)
-        {
-            //success
-            return new MyClass();
-        }
-
-        //fail
         return result;
+    }
+
+    private static Result<MyClass, BaseError> Return_ResultData_Ok_Test()
+    {
+        return new MyClass("test");
     }
 
     #endregion
@@ -43,18 +51,75 @@ public class ResultTest
     #region Methods
 
     [Fact]
-    public void Test()
+    public void Result_Test()
     {
-        var result = Result_Error_Test();
+        var result = Return_Result_Error_Test();
+
+        // way 1
         if (result.IsError())
         {
             result.UnwrapError().Code.ShouldBe(BaseErrorCode.NotFound);
         }
 
-        var data = ResultData_Success_Test();
-        data.IsError(out var err, out var my).ShouldBe(false);
-        err.ShouldBeNull();
-        _ = my.ShouldNotBeNull();
+        // way 2
+        if (result.IsError(out var err))
+        {
+            err.Value.Code.ShouldBe(BaseErrorCode.NotFound);
+
+            switch (err.Value.Code)
+            {
+                case BaseErrorCode.Failure:
+                    // do 1
+                    break;
+                case BaseErrorCode.Failed:
+                case BaseErrorCode.NotFound:
+                    // do 2
+                    break;
+                default:
+                    throw ImpossibleException.Instance;
+            }
+        }
+        else
+        {
+            // CS8629 Nullable value type may be null.
+            //err.Value.Code.ShouldBe(BaseErrorCode.NotFound);
+        }
+
+        var ok = Return_Result_Ok_Test();
+        if (ok.IsError())
+        {
+            //error
+        }
+        else
+        {
+            _ = Should.Throw<InvalidOperationException>(() => ok.UnwrapError());
+        }
+    }
+
+    [Fact]
+    public void Test()
+    {
+        var data = Return_ResultData_Error_Test();
+
+        if (data.IsError(out var err, out var my))
+        {
+            err.ShouldNotBeNull().ShouldBe(BaseErrorCode.NotFound);
+            my.ShouldBeNull();
+        }
+
+        var ok = Return_ResultData_Ok_Test();
+
+        if (ok.IsError(out err, out my))
+        {
+            err.ShouldBeNull();
+
+            // CS8602 Dereference of a possibly null reference.
+            //var a = my.Name;
+        }
+        else
+        {
+            my.Name.ShouldBe("test");
+        }
     }
 
     #endregion

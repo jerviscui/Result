@@ -9,55 +9,26 @@ public enum FileErrorCode
     B = 101
 }
 
-public sealed record FileError : BasicError, IError<FileError, FileErrorCode>
+public readonly record struct FileError(FileErrorCode Code, string? Reason = null, Exception? Exception = null)
+    : IError<FileError, FileErrorCode>
 {
-
-    #region Constants & Statics
-
-    public static implicit operator FileError(FileErrorCode errorCode) => new(errorCode);
-
-    #endregion
-
     public FileError() : this(FileErrorCode.A)
     {
     }
 
-    public FileError(FileErrorCode code, string? reason = null, Exception? exception = null)
-        : base((int)code, reason, exception)
-    {
-        Code = code;
-    }
+    #region IError implementations
 
-    #region IError
-
-    /// <inheritdoc/>
-    public new FileErrorCode Code
-    {
-        get => (FileErrorCode)base.Code;
-        internal set => base.Code = (int)value;
-    }
-
-    /// <inheritdoc/>
     public static Result<FileError> Result()
     {
-        return new FileError();
+        return new();
     }
 
-    /// <inheritdoc/>
-    public static Result<FileError> Result(FileErrorCode errorCode, string? reason = null, Exception? exception = null)
+    public static Result<FileError> Result(FileErrorCode code, string? reason = null, Exception? exception = null)
     {
-        return new FileError(errorCode, reason, exception);
-    }
-
-    /// <inheritdoc/>
-    public static Result<TData, FileError> Result<TData>(
-        FileErrorCode errorCode,
-        string? reason = null,
-        Exception? exception = null)
-    {
-        return new FileError(errorCode, reason, exception);
+        return new FileError(code, reason, exception);
     }
 
     #endregion
 
+    public static implicit operator FileError(FileErrorCode errorCode) => new(errorCode);
 }

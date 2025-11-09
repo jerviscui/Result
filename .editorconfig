@@ -1645,7 +1645,7 @@ dotnet_diagnostic.CA2007.severity = none
 dotnet_diagnostic.S1481.severity = none
 
 # Operator overloads have named alternates
-dotnet_diagnostic.CA2225.severity = suggestion
+dotnet_diagnostic.CA2225.severity = none
 
 # duplicate with CA2213
 # Classes should "Dispose" of members from the classes' own "Dispose" methods

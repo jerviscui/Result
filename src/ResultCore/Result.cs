@@ -13,7 +13,7 @@ namespace ResultCore;
 [StructLayout(LayoutKind.Auto)]
 [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
 public readonly record struct Result<TData, TError>
-    where TError : BasicError, new()
+    where TError : struct
 {
     /// <summary>
     /// Gets the data.
@@ -24,16 +24,6 @@ public readonly record struct Result<TData, TError>
     /// Gets the error.
     /// </summary>
     public readonly TError? Error;
-
-    #region Constants & Statics
-
-    public static implicit operator Result<TData, TError>(Result<TError> result) => new(result.UnwrapError());
-
-    public static implicit operator Result<TData, TError>(TData data) => new(data);
-
-    public static implicit operator Result<TData, TError>(TError error) => new(error);
-
-    #endregion
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Result{TData, TError}"/> with default <typeparamref name="TError"/>.
@@ -67,7 +57,7 @@ public readonly record struct Result<TData, TError>
     internal readonly TError UnwrapErrorWithoutCheck()
     {
         Debug.Assert(Error != null, $"{nameof(Error)} != null");
-        return Error;
+        return Error.Value;
     }
 
     public void Deconstruct(out TData? data, out TError? error)
@@ -106,9 +96,9 @@ public readonly record struct Result<TData, TError>
     public readonly bool IsError([NotNullWhen(true)] out TError? error, [NotNullWhen(false)] out TData? data)
     {
         data = default;
-        error = default;
+        error = null;
 
-        if (Error is not null)
+        if (Error.HasValue)
         {
             error = Error;
             return true;
@@ -124,21 +114,19 @@ public readonly record struct Result<TData, TError>
     /// <summary>
     /// Unwraps the error.
     /// </summary>
-    /// <exception cref="NullReferenceException">Error is null.</exception>
+    /// <exception cref="InvalidOperationException">Error is null.</exception>
     public readonly TError UnwrapError()
     {
-        if (Error is null)
-        {
-#pragma warning disable CA2201 // Do not raise reserved exception types
-            throw new NullReferenceException("Error is null.");
-#pragma warning restore CA2201 // Do not raise reserved exception types
-        }
-
-        return Error;
+        return Error!.Value!;
     }
 
     #endregion
 
+    public static implicit operator Result<TData, TError>(Result<TError> result) => new(result.UnwrapError());
+
+    public static implicit operator Result<TData, TError>(TData data) => new(data);
+
+    public static implicit operator Result<TData, TError>(TError error) => new(error);
 }
 
 /// <summary>
@@ -148,25 +136,30 @@ public readonly record struct Result<TData, TError>
 [StructLayout(LayoutKind.Auto)]
 [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
 public readonly record struct Result<TError>
-    where TError : BasicError, new()
+    where TError : struct
 {
-    /// <summary>
-    /// Gets the error.
-    /// </summary>
-    public readonly TError? Error;
 
     #region Constants & Statics
 
     /// <summary>
     /// No errors, just return.
     /// </summary>
-    private static readonly Result<TError> Ok = new(null!);
-
-    public static implicit operator Result<TError>(Result _) => Ok;
-
-    public static implicit operator Result<TError>(TError error) => new(error);
+    private static readonly Result<TError> Ok = new(null);
 
     #endregion
+
+    /// <summary>
+    /// Gets the error.
+    /// </summary>
+    public readonly TError? Error;
+
+#pragma warning disable IDE0060 // Remove unused parameter
+    private Result(TError? error)
+#pragma warning restore IDE0060 // Remove unused parameter
+    {
+        // just use for Ok
+        Error = null;
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Result{TError}"/> with default <typeparamref name="TError"/>.
@@ -190,7 +183,7 @@ public readonly record struct Result<TError>
     internal readonly TError UnwrapErrorWithoutCheck()
     {
         Debug.Assert(Error != null, $"{nameof(Error)} != null");
-        return Error;
+        return Error.Value;
     }
 
     /// <summary>
@@ -201,7 +194,7 @@ public readonly record struct Result<TError>
     /// </returns>
     public readonly bool IsError()
     {
-        return Error is not null;
+        return Error.HasValue;
     }
 
     /// <summary>
@@ -216,9 +209,9 @@ public readonly record struct Result<TError>
         Justification = "<Pending>")]
     public readonly bool IsError([NotNullWhen(true)] out TError? error)
     {
-        error = default;
+        error = null;
 
-        if (Error is not null)
+        if (Error.HasValue)
         {
             error = Error;
             return true;
@@ -230,21 +223,17 @@ public readonly record struct Result<TError>
     /// <summary>
     /// Unwraps the error.
     /// </summary>
-    /// <exception cref="NullReferenceException">Error is null.</exception>
+    /// <exception cref="InvalidOperationException">Error is null.</exception>
     public readonly TError UnwrapError()
     {
-        if (Error is null)
-        {
-#pragma warning disable CA2201 // Do not raise reserved exception types
-            throw new NullReferenceException("Error is null.");
-#pragma warning restore CA2201 // Do not raise reserved exception types
-        }
-
-        return Error;
+        return Error!.Value!;
     }
 
     #endregion
 
+    public static implicit operator Result<TError>(Result _) => Ok;
+
+    public static implicit operator Result<TError>(TError error) => new(error);
 }
 
 /// <inheritdoc/>

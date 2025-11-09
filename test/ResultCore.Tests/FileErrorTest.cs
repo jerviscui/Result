@@ -19,6 +19,29 @@ public class FileErrorTest
         //|   0-7: FileError <Error>k__BackingField (8 bytes) |
         //|===================================================|
 
+        //Type layout for 'Result`1'
+        //Size: 32 bytes. Paddings: 0 bytes (%0 of empty space)
+        //|====================================|
+        //|  0-31: Nullable`1 Error (32 bytes) |
+        //|====================================|
+
+        TypeLayout.PrintLayout(result.UnwrapError().GetType(), true);
+
+        //Type layout for 'FileError'
+        //Size: 24 bytes. Paddings: 4 bytes (%16 of empty space)
+        //|=======================================================|
+        //|   0-7: String <Reason>k__BackingField (8 bytes)       |
+        //|-------------------------------------------------------|
+        //|  8-15: Exception <Exception>k__BackingField (8 bytes) |
+        //|-------------------------------------------------------|
+        //| 16-19: FileErrorCode <Code>k__BackingField (4 bytes)  |
+        //| |================================|                    |
+        //| |   0-3: Int32 value__ (4 bytes) |                    |
+        //| |================================|                    |
+        //|-------------------------------------------------------|
+        //| 20-23: padding (4 bytes)                              |
+        //|=======================================================|
+
         return result;
     }
 
@@ -56,7 +79,7 @@ public class FileErrorTest
 
     private static Result<MyClass, FileError> ResultData_FileError_Success()
     {
-        Result<MyClass, FileError> result = new MyClass();
+        Result<MyClass, FileError> result = new MyClass("abc");
 
         TypeLayout.PrintLayout(result.GetType(), true);
         //Type layout for 'Result`2'
@@ -103,7 +126,7 @@ public class FileErrorTest
 
         if (failed.IsError(out var err))
         {
-            err.Code.ShouldBe(FileErrorCode.B);
+            err.Value.Code.ShouldBe(FileErrorCode.B);
         }
     }
 
@@ -122,14 +145,14 @@ public class FileErrorTest
         var failed = ResultData_FileError_Failed();
         if (failed.IsError(out var err2, out var data2))
         {
-            err2.Code.ShouldBe(FileErrorCode.B);
+            err2.Value.Code.ShouldBe(FileErrorCode.B);
             data2.ShouldBeNull();
         }
 
         var intFailed = ResultData_Int_Failed();
         if (intFailed.IsError(out var err3, out var data3))
         {
-            err3.Code.ShouldBe(FileErrorCode.B);
+            err3.Value.Code.ShouldBe(FileErrorCode.B);
             data3.ShouldBe(0);
         }
     }

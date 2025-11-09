@@ -9,22 +9,22 @@ public class ResultTaskTest
 
     private static async ResultTask<BaseError> ResultTask_Error_Async()
     {
-        await Task.Delay(1_000);
+        await Task.Yield();
 
-        return new BaseError(BaseErrorCode.NotFound);
+        return new BaseError(BaseErrorCode.NotFound); //return BaseError
     }
 
     private static ResultTask<BaseError> ResultTask_Error_New()
     {
-        return new BaseError(BaseErrorCode.NotFound);
-        //return BaseError.Result(BaseErrorCode.NotFound, null, null);
+        //return new BaseError(BaseErrorCode.NotFound);
+        return BaseError.Result(BaseErrorCode.NotFound); //return ResultTask<BaseError>
     }
 
     private static async ResultTask<BaseError> ResultTask_Error_Sync()
     {
-        await Task.CompletedTask;
+        await Task.Yield();
 
-        return new BaseError(BaseErrorCode.NotFound);
+        return new BaseError(BaseErrorCode.NotFound); //return BaseError
     }
 
     #endregion
@@ -35,8 +35,9 @@ public class ResultTaskTest
     //private static async ResultTask<BaseError> ResultTask_Ok_Sync()
     //{
     //    await Task.CompletedTask;
-    //
-    //    return Result.Ok;
+
+    //    // return new ResultTask<BaseError>(Result.Ok);
+    //    return Result.Ok; //return BaseError
     //}
 
     [Fact]
