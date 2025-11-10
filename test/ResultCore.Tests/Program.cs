@@ -12,6 +12,8 @@ public static class Program
 
     public static void Main()
     {
+        MyClass2.Example1BasicUsage();
+
         //var a = DefaultConfig.Instance.ArtifactsPath;
         //D:\Project\Result\artifacts\bin\ResultCore.Tests\release\BenchmarkDotNet.Artifacts
 
