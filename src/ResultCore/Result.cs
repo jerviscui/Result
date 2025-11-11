@@ -1,6 +1,6 @@
-using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace ResultCore;
@@ -13,6 +13,7 @@ namespace ResultCore;
 [StructLayout(LayoutKind.Auto)]
 [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
 public readonly record struct Result<TData, TError>
+    where TData : class?
     where TError : struct
 {
     /// <summary>
@@ -23,7 +24,9 @@ public readonly record struct Result<TData, TError>
     /// <summary>
     /// Gets the error.
     /// </summary>
-    public readonly TError? Error;
+    internal readonly TError _error;
+
+    internal readonly bool _hasError;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Result{TData, TError}"/> with default <typeparamref name="TError"/>.
@@ -40,6 +43,7 @@ public readonly record struct Result<TData, TError>
     public Result(TData data)
     {
         Data = data;
+        _hasError = false;
     }
 
     /// <summary>
@@ -47,23 +51,38 @@ public readonly record struct Result<TData, TError>
     /// The result is failed.
     /// </summary>
     /// <param name="error">The error.</param>
-    public Result(TError error)
+    public Result(in TError error)
     {
-        Error = error;
+        _error = error;
+        _hasError = true;
     }
 
     #region Methods
 
-    internal readonly TError UnwrapErrorWithoutCheck()
+    [UnscopedRef]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal ref readonly TError UnwrapErrorWithoutCheck()
     {
-        Debug.Assert(Error != null, $"{nameof(Error)} != null");
-        return Error.Value;
+        Debug.Assert(_hasError, $"{nameof(_hasError)} is true");
+        return ref _error;
     }
 
     public void Deconstruct(out TData? data, out TError? error)
     {
         data = Data;
-        error = Error;
+        error = _hasError ? _error : null;
+    }
+
+    /// <summary>
+    /// Determines whether this instance is error.
+    /// </summary>
+    /// <returns>
+    /// <c>true</c> if this instance is error; otherwise <c>false</c>.
+    /// </returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public readonly bool IsError()
+    {
+        return _hasError;
     }
 
     /// <summary>
@@ -78,7 +97,15 @@ public readonly record struct Result<TData, TError>
         Justification = "<Pending>")]
     public readonly bool IsError([NotNullWhen(true)] out TError? error)
     {
-        return IsError(out error, out _);
+        error = null;
+
+        if (_hasError)
+        {
+            error = _error;
+            return true;
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -95,38 +122,30 @@ public readonly record struct Result<TData, TError>
         Justification = "<Pending>")]
     public readonly bool IsError([NotNullWhen(true)] out TError? error, [NotNullWhen(false)] out TData? data)
     {
-        data = default;
+        data = null;
         error = null;
 
-        if (Error.HasValue)
+        if (_hasError)
         {
-            error = Error;
+            error = _error;
             return true;
         }
 
-#pragma warning disable S2955 // Generic parameters not constrained to reference types should not be compared to "null"
         Debug.Assert(Data != null, $"{nameof(Data)} != null");
-#pragma warning restore S2955 // Generic parameters not constrained to reference types should not be compared to "null"
         data = Data;
         return false;
     }
 
-    /// <summary>
-    /// Unwraps the error.
-    /// </summary>
-    /// <exception cref="InvalidOperationException">Error is null.</exception>
-    public readonly TError UnwrapError()
-    {
-        return Error!.Value;
-    }
-
     #endregion
 
-    public static implicit operator Result<TData, TError>(Result<TError> result) => new(result.UnwrapError());
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static implicit operator Result<TData, TError>(in Result<TError> result) => new(in result.UnwrapError());
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static implicit operator Result<TData, TError>(TData data) => new(data);
 
-    public static implicit operator Result<TData, TError>(TError error) => new(error);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static implicit operator Result<TData, TError>(in TError error) => new(in error);
 }
 
 /// <summary>
@@ -144,21 +163,23 @@ public readonly record struct Result<TError>
     /// <summary>
     /// No errors, just return.
     /// </summary>
-    private static readonly Result<TError> Ok = new(null);
+    private static readonly Result<TError> Ok = new(true);
 
     #endregion
 
     /// <summary>
     /// Gets the error.
     /// </summary>
-    public readonly TError? Error;
+    internal readonly TError _error;
+
+    internal readonly bool _hasError;
 
 #pragma warning disable IDE0060 // Remove unused parameter
-    private Result(TError? error)
+    private Result(bool isOk)
 #pragma warning restore IDE0060 // Remove unused parameter
     {
         // just use for Ok
-        Error = null;
+        _hasError = false;
     }
 
     /// <summary>
@@ -173,17 +194,20 @@ public readonly record struct Result<TError>
     /// The result is failed.
     /// </summary>
     /// <param name="error">The error.</param>
-    public Result(TError error)
+    public Result(in TError error)
     {
-        Error = error;
+        _error = error;
+        _hasError = true;
     }
 
     #region Methods
 
-    internal readonly TError UnwrapErrorWithoutCheck()
+    [UnscopedRef]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal ref readonly TError UnwrapErrorWithoutCheck()
     {
-        Debug.Assert(Error != null, $"{nameof(Error)} != null");
-        return Error.Value;
+        Debug.Assert(_hasError, $"{nameof(_hasError)} is true");
+        return ref _error;
     }
 
     /// <summary>
@@ -192,9 +216,10 @@ public readonly record struct Result<TError>
     /// <returns>
     /// <c>true</c> if this instance is error; otherwise <c>false</c>.
     /// </returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool IsError()
     {
-        return Error.HasValue;
+        return _hasError;
     }
 
     /// <summary>
@@ -211,36 +236,28 @@ public readonly record struct Result<TError>
     {
         error = null;
 
-        if (Error.HasValue)
+        if (_hasError)
         {
-            error = Error;
+            error = _error;
             return true;
         }
 
         return false;
     }
 
-    /// <summary>
-    /// Unwraps the error.
-    /// </summary>
-    /// <exception cref="InvalidOperationException">Error is null.</exception>
-    public readonly TError UnwrapError()
-    {
-        return Error!.Value;
-    }
-
     #endregion
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static implicit operator Result<TError>(Result _) => Ok;
 
-    public static implicit operator Result<TError>(TError error) => new(error);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static implicit operator Result<TError>(in TError error) => new(in error);
 }
 
-/// <inheritdoc/>
 public enum Result
 {
     /// <summary>
-    /// No errors, just return.
+    /// No errors, just for return Result.
     /// </summary>
     Ok
 }

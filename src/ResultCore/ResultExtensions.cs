@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -20,6 +22,7 @@ public static class ResultExtensions
     /// <param name="results">The results.</param>
     public static Result<IEnumerable<TData>, TError> Sequence<TData, TError>(
         this IEnumerable<Result<TData, TError>> results)
+        where TData : class?
         where TError : struct
     {
         var list = new List<TData>();
@@ -46,6 +49,7 @@ public static class ResultExtensions
     public static async Task<Result<IEnumerable<TData>, TError>> SequenceAsync<TData, TError>(
         this IAsyncEnumerable<Result<TData, TError>> results,
         CancellationToken cancellationToken = default)
+        where TData : class?
         where TError : struct
     {
         var list = new List<TData>();
@@ -61,6 +65,43 @@ public static class ResultExtensions
         }
 
         return list;
+    }
+
+    /// <summary>
+    /// Unwraps the error.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">No have Error.</exception>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static ref readonly TError UnwrapError<TData, TError>(this in Result<TData, TError> result)
+        where TData : class?
+        where TError : struct
+    {
+        if (!result._hasError)
+        {
+#pragma warning disable CA2201 // Do not raise reserved exception types
+            throw new InvalidOperationException("No have Error.");
+#pragma warning restore CA2201 // Do not raise reserved exception types
+        }
+
+        return ref result._error;
+    }
+
+    /// <summary>
+    /// Unwraps the error.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">No have Error.</exception>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static ref readonly TError UnwrapError<TError>(this in Result<TError> result)
+        where TError : struct
+    {
+        if (!result._hasError)
+        {
+#pragma warning disable CA2201 // Do not raise reserved exception types
+            throw new InvalidOperationException("No have Error.");
+#pragma warning restore CA2201 // Do not raise reserved exception types
+        }
+
+        return ref result._error;
     }
 
     #endregion

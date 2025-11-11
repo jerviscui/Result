@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace ResultCore.Tests;
 
 public interface IBaseError<TError, TCode> : IError<TError, TCode>
@@ -12,6 +14,7 @@ public interface IBaseError<TError, TCode> : IError<TError, TCode>
     /// <param name="code">The code.</param>
     /// <param name="reason">The reason.</param>
     /// <param name="exception">The exception.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static abstract Result<TError> Result(TCode code, string? reason = null, Exception? exception = null);
 
     #endregion
@@ -50,6 +53,7 @@ public readonly record struct BaseError(BaseErrorCode Code, string? Reason = nul
 
     #region IBaseError implementations
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result<BaseError> Result(BaseErrorCode code, string? reason = null, Exception? exception = null)
     {
         return new BaseError(code, reason, exception);
@@ -59,11 +63,13 @@ public readonly record struct BaseError(BaseErrorCode Code, string? Reason = nul
 
     #region IError implementations
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result<BaseError> Result()
     {
         return new BaseError();
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result<BaseError> Result(BaseErrorCode code)
     {
         return new BaseError(code);
@@ -71,5 +77,6 @@ public readonly record struct BaseError(BaseErrorCode Code, string? Reason = nul
 
     #endregion
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static implicit operator BaseError(BaseErrorCode errorCode) => new(errorCode);
 }

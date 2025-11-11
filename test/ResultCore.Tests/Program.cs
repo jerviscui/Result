@@ -12,8 +12,6 @@ public static class Program
 
     public static void Main()
     {
-        MyClass2.Example1BasicUsage();
-
         //var a = DefaultConfig.Instance.ArtifactsPath;
         //D:\Project\Result\artifacts\bin\ResultCore.Tests\release\BenchmarkDotNet.Artifacts
 
@@ -26,7 +24,7 @@ public static class Program
                             "BenchmarkDotNet.Artifacts",
                             DateTime.Now.ToString("yyyy-MM-dd")))
                 .AddExporter(MarkdownExporter.Default)
-                .AddJob(Job.ShortRun.WithLaunchCount(1)));
+                .AddJob(Job.MediumRun.WithLaunchCount(1)));
     }
 
     #endregion

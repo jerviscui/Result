@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace ResultCore;
 
 public interface IError<TError, TCode>
@@ -9,11 +11,13 @@ public interface IError<TError, TCode>
     /// <summary>
     /// Create a default result.
     /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static abstract Result<TError> Result();
 
     /// <summary>
     /// Create a result with the specified code.
     /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static abstract Result<TError> Result(TCode code);
 
     #endregion

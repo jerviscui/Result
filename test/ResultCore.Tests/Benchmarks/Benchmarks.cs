@@ -65,6 +65,10 @@ public class Benchmarks
         for (var i = 0; i < Count; i++)
         {
             var a = ReturnRef_1();
+            if (a.IsError(out var error))
+            {
+                var code = error.Code;
+            }
             list.Add(a);
         }
     }
@@ -76,6 +80,10 @@ public class Benchmarks
         for (var i = 0; i < Count; i++)
         {
             var a = ReturnRef_2();
+            if (a.IsError(out var error))
+            {
+                var code = error.Code;
+            }
             list.Add(a);
         }
     }
@@ -87,6 +95,10 @@ public class Benchmarks
         for (var i = 0; i < Count; i++)
         {
             var a = ReturnRef_3();
+            if (a.IsError(out var error))
+            {
+                var code = error.Code;
+            }
             list.Add(a);
         }
     }
@@ -98,6 +110,10 @@ public class Benchmarks
         for (var i = 0; i < Count; i++)
         {
             var a = Return_1();
+            if (a.IsError(out var error))
+            {
+                var code = error.Value.Code;
+            }
             list.Add(a);
         }
     }
@@ -109,6 +125,10 @@ public class Benchmarks
         for (var i = 0; i < Count; i++)
         {
             var a = Return_2();
+            if (a.IsError(out var error))
+            {
+                var code = error.Value.Code;
+            }
             list.Add(a);
         }
     }
@@ -120,6 +140,10 @@ public class Benchmarks
         for (var i = 0; i < Count; i++)
         {
             var a = Return_3();
+            if (a.IsError(out var error))
+            {
+                var code = error.Value.Code;
+            }
             list.Add(a);
         }
     }
@@ -131,6 +155,10 @@ public class Benchmarks
         for (var i = 0; i < Count; i++)
         {
             var a = Return_FileError();
+            if (a.IsError(out var error))
+            {
+                var code = error.Value.Code;
+            }
             list.Add(a);
         }
     }
