@@ -1,6 +1,6 @@
 namespace ResultCore.Tests;
 
-internal sealed class MyClass
+public sealed class MyClass
 {
     public MyClass(string name)
     {

@@ -13,6 +13,9 @@ public static class Program
 
     public static void Main()
     {
+        var a = Benchmarks.Return_2();
+        var b = Benchmarks.Return_FileError();
+
         //var a = DefaultConfig.Instance.ArtifactsPath;
         //D:\Project\Result\artifacts\bin\ResultCore.Tests\release\BenchmarkDotNet.Artifacts
 
@@ -21,7 +24,7 @@ public static class Program
                 $".\\BenchmarkDotNet.Aritfacts.{DateTime.Now.ToString("u").Replace(' ', '_').Replace(':', '-')}")
             .AddExporter(MarkdownExporter.GitHub)
             .AddDiagnoser(MemoryDiagnoser.Default)
-            .AddJob(Job.MediumRun.WithLaunchCount(1));
+            .AddJob(Job.ShortRun.WithLaunchCount(1));
 
         _ = BenchmarkRunner.Run<Benchmarks>(config);
     }

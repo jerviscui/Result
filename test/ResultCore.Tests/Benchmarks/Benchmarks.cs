@@ -18,21 +18,9 @@ public class Benchmarks
         return result;
     }
 
-    private static Result<MyClass, BaseError> Return_2()
-    {
-        var result = BaseError.Result(BaseErrorCode.NotFound);
-        return result;
-    }
-
     private static Result<MyClass, BaseError> Return_3()
     {
         BaseError result = BaseErrorCode.NotFound;
-        return result;
-    }
-
-    private static Result<MyClass, FileError> Return_FileError()
-    {
-        var result = FileError.Result(FileErrorCode.A);
         return result;
     }
 
@@ -51,6 +39,18 @@ public class Benchmarks
     private static ResultRef<MyClass, RefError> ReturnRef_3()
     {
         RefError result = BaseErrorCode.NotFound;
+        return result;
+    }
+
+    public static Result<MyClass, BaseError> Return_2()
+    {
+        var result = BaseError.Result(BaseErrorCode.NotFound);
+        return result;
+    }
+
+    public static Result<MyClass, FileError> Return_FileError()
+    {
+        var result = FileError.Result(FileErrorCode.A);
         return result;
     }
 
