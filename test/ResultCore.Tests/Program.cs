@@ -1,4 +1,5 @@
 using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Diagnosers;
 using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
@@ -15,16 +16,14 @@ public static class Program
         //var a = DefaultConfig.Instance.ArtifactsPath;
         //D:\Project\Result\artifacts\bin\ResultCore.Tests\release\BenchmarkDotNet.Artifacts
 
-        _ = BenchmarkRunner.Run<Benchmarks>(
-            DefaultConfig.Instance
-                .WithArtifactsPath(
-                    Path.Combine(
-                            AppContext.BaseDirectory,
-                            "../../../../test/ResultCore.Tests",
-                            "BenchmarkDotNet.Artifacts",
-                            DateTime.Now.ToString("yyyy-MM-dd")))
-                .AddExporter(MarkdownExporter.Default)
-                .AddJob(Job.MediumRun.WithLaunchCount(1)));
+        var config = DefaultConfig.Instance
+            .WithArtifactsPath(
+                $".\\BenchmarkDotNet.Aritfacts.{DateTime.Now.ToString("u").Replace(' ', '_').Replace(':', '-')}")
+            .AddExporter(MarkdownExporter.GitHub)
+            .AddDiagnoser(MemoryDiagnoser.Default)
+            .AddJob(Job.MediumRun.WithLaunchCount(1));
+
+        _ = BenchmarkRunner.Run<Benchmarks>(config);
     }
 
     #endregion

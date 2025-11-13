@@ -56,7 +56,7 @@ public readonly record struct BaseError(BaseErrorCode Code, string? Reason = nul
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result<BaseError> Result(BaseErrorCode code, string? reason = null, Exception? exception = null)
     {
-        return new BaseError(code, reason, exception);
+        return new Result<BaseError>(new BaseError(code, reason, exception));
     }
 
     #endregion
@@ -66,13 +66,13 @@ public readonly record struct BaseError(BaseErrorCode Code, string? Reason = nul
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result<BaseError> Result()
     {
-        return new BaseError();
+        return new Result<BaseError>(new BaseError());
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result<BaseError> Result(BaseErrorCode code)
     {
-        return new BaseError(code);
+        return new Result<BaseError>(new BaseError(code));
     }
 
     #endregion

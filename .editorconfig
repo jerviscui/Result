@@ -1444,6 +1444,9 @@ dotnet_diagnostic.S1312.severity = none
 # 如何让检测通过？
 dotnet_diagnostic.S1451.severity = none
 
+# Underscores should be used to make large numbers readable
+dotnet_diagnostic.S2148.severity = none
+
 # Optional parameters should not be used
 # 尽量使用方法重载，少用默认值
 dotnet_diagnostic.S2360.severity = none
@@ -1462,6 +1465,12 @@ dotnet_diagnostic.S4049.severity = none
 
 # Literals should not be passed as localized parameters
 dotnet_diagnostic.S4055.severity = none
+
+# Use UTC when recording DateTime instants
+dotnet_diagnostic.S6563.severity = none
+
+# Don't hardcode the format when turning dates and times to strings
+dotnet_diagnostic.S6585.severity = none
 
 # Controllers should not have mixed responsibilities
 dotnet_diagnostic.S6960.severity = none

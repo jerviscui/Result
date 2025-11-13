@@ -10,11 +10,11 @@ public class ResultTest
     private static Result<BaseError> Return_Result_Error_Test()
     {
         // way 1
-        //var result = new Result<BaseError>(BaseErrorCode.NotFound);
+        var result1 = new Result<BaseError>(BaseErrorCode.NotFound);
         // way 2
-        //var result = new Result<BaseError>(new BaseError(BaseErrorCode.NotFound));
+        var result2 = new Result<BaseError>(new BaseError(BaseErrorCode.NotFound));
         // way 3
-        //var result = BaseError.Result(BaseErrorCode.NotFound);
+        var result3 = BaseError.Result(BaseErrorCode.NotFound);
         // way 4
         BaseError result = BaseErrorCode.NotFound;
 
@@ -29,11 +29,11 @@ public class ResultTest
     private static Result<MyClass, BaseError> Return_ResultData_Error_Test()
     {
         // way 1
-        //var result = new Result<BaseError>(BaseErrorCode.NotFound);
+        var result1 = new Result<BaseError>(BaseErrorCode.NotFound);
         // way 2
-        //var result = new Result<BaseError>(new BaseError(BaseErrorCode.NotFound));
+        var result2 = new Result<BaseError>(new BaseError(BaseErrorCode.NotFound));
         // way 3
-        //var result = BaseError.Result(BaseErrorCode.NotFound);
+        var result3 = BaseError.Result(BaseErrorCode.NotFound);
         // way 4
         BaseError result = BaseErrorCode.NotFound;
 
