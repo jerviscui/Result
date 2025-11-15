@@ -1,5 +1,6 @@
 namespace ResultCore.Tests;
 
+//class
 public sealed record RefError(BaseErrorCode Code, string? Reason = null, Exception? Exception = null)
 {
     public RefError() : this(BaseErrorCode.NotFound)

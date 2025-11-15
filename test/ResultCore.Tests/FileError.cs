@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace ResultCore.Tests;
 
 public enum FileErrorCode
@@ -9,11 +11,13 @@ public enum FileErrorCode
     B = 101
 }
 
+//struct 16byte
 public readonly record struct FileError(FileErrorCode Code, string? Reason = null) : IError<FileError, FileErrorCode>
 {
 
     #region Constants & Statics
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result<FileError> Result(FileErrorCode code, string? reason = null)
     {
         return new Result<FileError>(new FileError(code, reason));
@@ -21,17 +25,20 @@ public readonly record struct FileError(FileErrorCode Code, string? Reason = nul
 
     #endregion
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public FileError() : this(FileErrorCode.A)
     {
     }
 
     #region IError implementations
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result<FileError> Result()
     {
         return new Result<FileError>(new FileError());
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result<FileError> Result(FileErrorCode code)
     {
         return new Result<FileError>(new FileError(code));
@@ -39,5 +46,6 @@ public readonly record struct FileError(FileErrorCode Code, string? Reason = nul
 
     #endregion
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static implicit operator FileError(FileErrorCode errorCode) => new(errorCode);
 }

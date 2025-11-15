@@ -44,9 +44,11 @@ public enum BaseErrorCode
     NotFound = 99
 }
 
+//struct 24byte
 public readonly record struct BaseError(BaseErrorCode Code, string? Reason = null, Exception? Exception = null)
     : IBaseError<BaseError, BaseErrorCode>
 {
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public BaseError() : this(BaseErrorCode.Failed)
     {
     }

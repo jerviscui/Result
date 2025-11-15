@@ -4,6 +4,7 @@ using BenchmarkDotNet.Diagnosers;
 namespace ResultCore.Tests;
 
 [MemoryDiagnoser]
+//[InliningDiagnoser(logFailuresOnly: false, allowedNamespaces: new[] { "YourNamespace" })]
 [HardwareCounters(HardwareCounter.LlcMisses, HardwareCounter.LlcReference)]
 public class Benchmarks
 {
@@ -69,7 +70,7 @@ public class Benchmarks
             {
                 var code = error.Code;
             }
-            list.Add(a);
+            //list.Add(a);
         }
     }
 
@@ -84,7 +85,7 @@ public class Benchmarks
             {
                 var code = error.Code;
             }
-            list.Add(a);
+            //list.Add(a);
         }
     }
 
@@ -99,7 +100,7 @@ public class Benchmarks
             {
                 var code = error.Code;
             }
-            list.Add(a);
+            //list.Add(a);
         }
     }
 
@@ -114,7 +115,7 @@ public class Benchmarks
             {
                 var code = error.Value.Code;
             }
-            list.Add(a);
+            //list.Add(a);
         }
     }
 
@@ -129,7 +130,7 @@ public class Benchmarks
             {
                 var code = error.Value.Code;
             }
-            list.Add(a);
+            //list.Add(a);
         }
     }
 
@@ -144,7 +145,7 @@ public class Benchmarks
             {
                 var code = error.Value.Code;
             }
-            list.Add(a);
+            //list.Add(a);
         }
     }
 
@@ -159,7 +160,7 @@ public class Benchmarks
             {
                 var code = error.Value.Code;
             }
-            list.Add(a);
+            //list.Add(a);
         }
     }
 

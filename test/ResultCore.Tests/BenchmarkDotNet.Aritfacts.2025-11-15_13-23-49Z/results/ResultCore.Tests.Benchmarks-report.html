@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>ResultCore.Tests.Benchmarks-20251115-132358</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet v0.15.6, Windows 10 (10.0.19045.6332/22H2/2022Update)
+12th Gen Intel Core i7-12800HX 2.00GHz, 1 CPU, 24 logical and 16 physical cores
+.NET SDK 9.0.307
+  [Host]   : .NET 9.0.11 (9.0.11, 9.0.1125.51716), X64 RyuJIT x86-64-v3
+  ShortRun : .NET 9.0.11 (9.0.11, 9.0.1125.51716), X64 RyuJIT x86-64-v3
+</code></pre>
+<pre><code>Job=ShortRun  IterationCount=3  LaunchCount=1  
+WarmupCount=3  
+</code></pre>
+
+<table>
+<thead><tr><th>Method</th><th>Mean </th><th>Error</th><th>StdDev</th><th>Ratio</th><th>RatioSD</th><th>Gen0</th><th>LLCReference/Op</th><th>LLCMisses/Op</th><th>Gen1</th><th>Gen2</th><th>Allocated</th><th>Alloc Ratio</th>
+</tr>
+</thead><tbody><tr><td>Ref1</td><td>14,829.0 &mu;s</td><td>986.7 &mu;s</td><td>54.08 &mu;s</td><td>6.06</td><td>0.14</td><td>4000.0000</td><td>1,172,770</td><td>594,261</td><td>953.1250</td><td>953.1250</td><td>53.41 MB</td><td>1.40</td>
+</tr><tr><td>Ref2</td><td>14,888.5 &mu;s</td><td>309.6 &mu;s</td><td>16.97 &mu;s</td><td>6.09</td><td>0.14</td><td>4000.0000</td><td>1,158,827</td><td>536,235</td><td>953.1250</td><td>953.1250</td><td>53.41 MB</td><td>1.40</td>
+</tr><tr><td>Ref3</td><td>13,991.1 &mu;s</td><td>565.0 &mu;s</td><td>30.97 &mu;s</td><td>5.72</td><td>0.13</td><td>3937.5000</td><td>1,148,928</td><td>525,653</td><td>906.2500</td><td>906.2500</td><td>53.41 MB</td><td>1.40</td>
+</tr><tr><td>Struct1</td><td>2,447.3 &mu;s</td><td>1,191.9 &mu;s</td><td>65.33 &mu;s</td><td>1.00</td><td>0.03</td><td>996.0938</td><td>672,939</td><td>568,576</td><td>996.0938</td><td>996.0938</td><td>38.15 MB</td><td>1.00</td>
+</tr><tr><td>Struct2</td><td>2,493.6 &mu;s</td><td>2,465.3 &mu;s</td><td>135.13 &mu;s</td><td>1.02</td><td>0.05</td><td>996.0938</td><td>678,485</td><td>568,832</td><td>996.0938</td><td>996.0938</td><td>38.15 MB</td><td>1.00</td>
+</tr><tr><td>Struct3</td><td>2,449.9 &mu;s</td><td>1,340.8 &mu;s</td><td>73.50 &mu;s</td><td>1.00</td><td>0.03</td><td>996.0938</td><td>670,549</td><td>573,184</td><td>996.0938</td><td>996.0938</td><td>38.15 MB</td><td>1.00</td>
+</tr><tr><td>StructSmall</td><td>520.6 &mu;s</td><td>315.2 &mu;s</td><td>17.28 &mu;s</td><td>0.21</td><td>0.01</td><td>999.0234</td><td>20,544</td><td>1,899</td><td>999.0234</td><td>999.0234</td><td>30.52 MB</td><td>0.80</td>
+</tr></tbody></table>
+</body>
+</html>
