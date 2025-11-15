@@ -1,0 +1,33 @@
+<!DOCTYPE html><html lang='en'><head><meta charset='utf-8' />
+<title>Combined Output of DisassemblyDiagnoser and HardwareCounters Benchmarks.Struct2: ShortRun(IterationCount=3, LaunchCount=1, WarmupCount=3)</title>
+
+<style type="text/css">
+    pre { margin: 0px; }
+    table { border-collapse:collapse; }
+    td.perMethod { border-top: 1px black solid; }
+    tr.evenMap td { background-color: #F5F5F5; }  
+</style>
+</head>
+<body>
+<!-- Generated with BenchmarkDotNet 
+For LlcReference we have 3735552 in total, 327680 without noise
+For LlcMisses we have 458752 in total, 0 without noise
+-->
+<table><thead><tr>
+<th>llcRef</th>
+<th>llcMiss</th>
+<th></th></tr></thead>
+<tbody>
+<tr><th colspan="3">ResultCore.Tests.Benchmarks.Struct2()</th></tr>
+<tr class="evenMap">
+<td>-</td><td>-</td><td><pre><code>mov       eax,0F4240</pre></code></td></tr>
+<tr class="evenMap">
+<td title="327680 of 327680">100.00%</td><td>-</td><td><pre><code>dec       eax</pre></code></td></tr>
+<tr class="evenMap">
+<td>-</td><td>-</td><td><pre><code>jne       short 00007FFAD65AC2C5</pre></code></td></tr>
+<tr class="evenMap">
+<td>-</td><td>-</td><td><pre><code>ret</pre></code></td></tr>
+<tr>
+<td class="perMethod" title="327680 of 327680">100.00%</td><td  class="perMethod">-</td><td></td></tr>
+<tr><td colspan="3"></td></tr>
+</tbody></table></body></html>

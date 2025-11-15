@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>DisassemblyDiagnoser Output ResultCore.Tests.Benchmarks-20251115-151910</title>
+
+<style type="text/css">
+    table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+    td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: left; }
+    tr { background-color: #fff; border-top: 1px solid #ccc; }
+    tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<table>
+<thead>
+<tr><th colspan="7">ResultCore.Tests.Benchmarks-20251115-151910</th></tr>
+<tr>
+<th>Ref1 .NET 9.0.11 (9.0.11, 9.0.1125.51716), X64 RyuJIT x86-64-v3</th>
+<th>Ref2 .NET 9.0.11 (9.0.11, 9.0.1125.51716), X64 RyuJIT x86-64-v3</th>
+<th>Ref3 .NET 9.0.11 (9.0.11, 9.0.1125.51716), X64 RyuJIT x86-64-v3</th>
+<th>Struct1 .NET 9.0.11 (9.0.11, 9.0.1125.51716), X64 RyuJIT x86-64-v3</th>
+<th>Struct2 .NET 9.0.11 (9.0.11, 9.0.1125.51716), X64 RyuJIT x86-64-v3</th>
+<th>Struct3 .NET 9.0.11 (9.0.11, 9.0.1125.51716), X64 RyuJIT x86-64-v3</th>
+<th>StructSmall .NET 9.0.11 (9.0.11, 9.0.1125.51716), X64 RyuJIT x86-64-v3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="vertical-align:top;"><pre><code>
+ResultCore.Tests.Benchmarks.Ref1()
+push      rsi
+push      rbx
+sub       rsp,28
+mov       rbx,offset MT_ResultCore.Tests.RefError
+mov       esi,0F4240
+mov       rcx,rbx
+call      CORINFO_HELP_NEWSFAST
+mov       dword ptr [rax+18],63
+xor       ecx,ecx
+mov       [rax+8],rcx
+mov       [rax+10],rcx
+dec       esi
+jne       short 00007FFAD659C635
+add       rsp,28
+pop       rbx
+pop       rsi
+ret
+
+</code></pre></td>
+<td style="vertical-align:top;"><pre><code>
+ResultCore.Tests.Benchmarks.Ref2()
+push      rsi
+push      rbx
+sub       rsp,28
+mov       rbx,offset MT_ResultCore.Tests.RefError
+mov       esi,0F4240
+mov       rcx,rbx
+call      CORINFO_HELP_NEWSFAST
+mov       dword ptr [rax+18],63
+xor       ecx,ecx
+mov       [rax+8],rcx
+mov       [rax+10],rcx
+dec       esi
+jne       short 00007FFAD659BBF5
+add       rsp,28
+pop       rbx
+pop       rsi
+ret
+
+</code></pre></td>
+<td style="vertical-align:top;"><pre><code>
+ResultCore.Tests.Benchmarks.Ref3()
+push      rsi
+push      rbx
+sub       rsp,28
+mov       rbx,offset MT_ResultCore.Tests.RefError
+mov       esi,0F4240
+mov       rcx,rbx
+call      CORINFO_HELP_NEWSFAST
+mov       dword ptr [rax+18],63
+xor       ecx,ecx
+mov       [rax+8],rcx
+mov       [rax+10],rcx
+dec       esi
+jne       short 00007FFAD659BD95
+add       rsp,28
+pop       rbx
+pop       rsi
+ret
+
+</code></pre></td>
+<td style="vertical-align:top;"><pre><code>
+ResultCore.Tests.Benchmarks.Struct1()
+mov       eax,0F4240
+dec       eax
+jne       short 00007FFAD65BBEC5
+ret
+
+</code></pre></td>
+<td style="vertical-align:top;"><pre><code>
+ResultCore.Tests.Benchmarks.Struct2()
+mov       eax,0F4240
+dec       eax
+jne       short 00007FFAD65AC2C5
+ret
+
+</code></pre></td>
+<td style="vertical-align:top;"><pre><code>
+ResultCore.Tests.Benchmarks.Struct3()
+mov       eax,0F4240
+dec       eax
+jne       short 00007FFAD65ABF85
+ret
+
+</code></pre></td>
+<td style="vertical-align:top;"><pre><code>
+ResultCore.Tests.Benchmarks.StructSmall()
+mov       eax,0F4240
+dec       eax
+jne       short 00007FFAD65BC1A5
+ret
+
+</code></pre></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

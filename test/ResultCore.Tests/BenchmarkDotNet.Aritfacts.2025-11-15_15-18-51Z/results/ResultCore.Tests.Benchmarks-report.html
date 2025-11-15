@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>ResultCore.Tests.Benchmarks-20251115-151910</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet v0.15.6, Windows 10 (10.0.19045.5487/22H2/2022Update)
+Intel Xeon CPU E5-2667 v4 3.20GHz, 1 CPU, 16 logical and 8 physical cores
+.NET SDK 9.0.307
+  [Host]   : .NET 9.0.11 (9.0.11, 9.0.1125.51716), X64 RyuJIT x86-64-v3
+  ShortRun : .NET 9.0.11 (9.0.11, 9.0.1125.51716), X64 RyuJIT x86-64-v3
+</code></pre>
+<pre><code>Job=ShortRun  IterationCount=3  LaunchCount=1  
+WarmupCount=3  
+</code></pre>
+
+<table>
+<thead><tr><th>Method</th><th>Mean</th><th>Error</th><th>StdDev</th><th>Ratio</th><th>RatioSD</th><th>Gen0</th><th>LLCReference/Op</th><th>LLCMisses/Op</th><th>Code Size</th><th>Allocated</th><th>Alloc Ratio</th>
+</tr>
+</thead><tbody><tr><td>Ref1</td><td>5,828.0 &mu;s</td><td>2,452.10 &mu;s</td><td>134.41 &mu;s</td><td>19.44</td><td>0.53</td><td>3054.6875</td><td>733,013</td><td>2,731</td><td>57 B</td><td>40000000 B</td><td>NA</td>
+</tr><tr><td>Ref2</td><td>5,917.3 &mu;s</td><td>2,467.34 &mu;s</td><td>135.24 &mu;s</td><td>19.74</td><td>0.53</td><td>3054.6875</td><td>732,843</td><td>1,877</td><td>57 B</td><td>40000000 B</td><td>NA</td>
+</tr><tr><td>Ref3</td><td>5,880.5 &mu;s</td><td>7,271.45 &mu;s</td><td>398.57 &mu;s</td><td>19.62</td><td>1.21</td><td>3054.6875</td><td>731,793</td><td>2,219</td><td>57 B</td><td>40000000 B</td><td>NA</td>
+</tr><tr><td>Struct1</td><td>299.8 &mu;s</td><td>117.66 &mu;s</td><td>6.45 &mu;s</td><td>1.00</td><td>0.03</td><td>-</td><td>480</td><td>43</td><td>10 B</td><td>-</td><td>NA</td>
+</tr><tr><td>Struct2</td><td>301.0 &mu;s</td><td>161.65 &mu;s</td><td>8.86 &mu;s</td><td>1.00</td><td>0.03</td><td>-</td><td>608</td><td>75</td><td>10 B</td><td>-</td><td>NA</td>
+</tr><tr><td>Struct3</td><td>308.6 &mu;s</td><td>239.91 &mu;s</td><td>13.15 &mu;s</td><td>1.03</td><td>0.04</td><td>-</td><td>587</td><td>53</td><td>10 B</td><td>-</td><td>NA</td>
+</tr><tr><td>StructSmall</td><td>295.7 &mu;s</td><td>24.31 &mu;s</td><td>1.33 &mu;s</td><td>0.99</td><td>0.02</td><td>-</td><td>480</td><td>32</td><td>10 B</td><td>-</td><td>NA</td>
+</tr></tbody></table>
+</body>
+</html>

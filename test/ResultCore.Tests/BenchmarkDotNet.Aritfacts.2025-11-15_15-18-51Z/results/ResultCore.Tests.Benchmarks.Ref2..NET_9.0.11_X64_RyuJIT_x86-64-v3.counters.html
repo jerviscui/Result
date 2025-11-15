@@ -1,0 +1,59 @@
+<!DOCTYPE html><html lang='en'><head><meta charset='utf-8' />
+<title>Combined Output of DisassemblyDiagnoser and HardwareCounters Benchmarks.Ref2: ShortRun(IterationCount=3, LaunchCount=1, WarmupCount=3)</title>
+
+<style type="text/css">
+    pre { margin: 0px; }
+    table { border-collapse:collapse; }
+    td.perMethod { border-top: 1px black solid; }
+    tr.evenMap td { background-color: #F5F5F5; }  
+</style>
+</head>
+<body>
+<!-- Generated with BenchmarkDotNet 
+For LlcReference we have 281411584 in total, 20971520 without noise
+For LlcMisses we have 720896 in total, 65536 without noise
+-->
+<table><thead><tr>
+<th>llcRef</th>
+<th>llcMiss</th>
+<th></th></tr></thead>
+<tbody>
+<tr><th colspan="3">ResultCore.Tests.Benchmarks.Ref2()</th></tr>
+<tr class="evenMap">
+<td>-</td><td>-</td><td><pre><code>push      rsi</pre></code></td></tr>
+<tr class="evenMap">
+<td>-</td><td>-</td><td><pre><code>push      rbx</pre></code></td></tr>
+<tr class="evenMap">
+<td>-</td><td>-</td><td><pre><code>sub       rsp,28</pre></code></td></tr>
+<tr class="evenMap">
+<td>-</td><td>-</td><td><pre><code>mov       rbx,offset MT_ResultCore.Tests.RefError</pre></code></td></tr>
+<tr class="evenMap">
+<td>-</td><td>-</td><td><pre><code>mov       esi,0F4240</pre></code></td></tr>
+<tr class="evenMap">
+<td title="1376256 of 20971520">6.56%</td><td>-</td><td><pre><code>mov       rcx,rbx</pre></code></td></tr>
+<tr class="evenMap">
+<td title="589824 of 20971520">2.81%</td><td>-</td><td><pre><code>call      CORINFO_HELP_NEWSFAST</pre></code></td></tr>
+<tr class="evenMap">
+<td title="1703936 of 20971520">8.13%</td><td>-</td><td><pre><code>mov       dword ptr [rax+18],63</pre></code></td></tr>
+<tr class="evenMap">
+<td title="3014656 of 20971520">14.37%</td><td>-</td><td><pre><code>xor       ecx,ecx</pre></code></td></tr>
+<tr class="evenMap">
+<td title="131072 of 20971520">0.63%</td><td>-</td><td><pre><code>mov       [rax+8],rcx</pre></code></td></tr>
+<tr class="evenMap">
+<td title="2752512 of 20971520">13.13%</td><td title="65536 of 65536">100.00%</td><td><pre><code>mov       [rax+10],rcx</pre></code></td></tr>
+<tr class="evenMap">
+<td title="11403264 of 20971520">54.37%</td><td>-</td><td><pre><code>dec       esi</pre></code></td></tr>
+<tr class="evenMap">
+<td>-</td><td>-</td><td><pre><code>jne       short 00007FFAD659BBF5</pre></code></td></tr>
+<tr class="evenMap">
+<td>-</td><td>-</td><td><pre><code>add       rsp,28</pre></code></td></tr>
+<tr class="evenMap">
+<td>-</td><td>-</td><td><pre><code>pop       rbx</pre></code></td></tr>
+<tr class="evenMap">
+<td>-</td><td>-</td><td><pre><code>pop       rsi</pre></code></td></tr>
+<tr class="evenMap">
+<td>-</td><td>-</td><td><pre><code>ret</pre></code></td></tr>
+<tr>
+<td class="perMethod" title="20971520 of 20971520">100.00%</td><td class="perMethod" title="65536 of 65536">100.00%</td><td></td></tr>
+<tr><td colspan="3"></td></tr>
+</tbody></table></body></html>
