@@ -3,20 +3,30 @@
 
 :: build
 @echo 1. build
-@cd %curdir%\src
 
+@cd %curdir%\src
 @cd ./ResultCore
+dotnet clean >nul
+dotnet build --configuration Release >nul
+
+@cd %curdir%\src
+@cd ./ResultCore.Serialization.Microsoft.Orleans.Serialization
 dotnet clean >nul
 dotnet build --configuration Release >nul
 
 :: pack
 @echo.
 @echo 2. pack
+
 @cd %curdir%\nupkgs
 @del /s /q /f *.nupkg >nul 2>nul
-@cd %curdir%\src
 
+@cd %curdir%\src
 @cd ./ResultCore
+dotnet pack -c Release -o %curdir%\nupkgs --no-build >nul
+
+@cd %curdir%\src
+@cd ./ResultCore.Serialization.Microsoft.Orleans.Serialization
 dotnet pack -c Release -o %curdir%\nupkgs --no-build >nul
 
 :: publish
