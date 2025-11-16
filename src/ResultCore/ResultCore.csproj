@@ -7,7 +7,7 @@
     <AssemblyName>ResultCore</AssemblyName>
     <LangVersion>latest</LangVersion>
 
-    <Version>0.3.1</Version>
+    <Version>0.3.2</Version>
     <PackageId>$(AssemblyName).J</PackageId>
     <Description>A library used for wrap return value or errors.</Description>
     <Authors>jerviscui</Authors>

@@ -59,35 +59,35 @@ public class Benchmarks
 
     #region Methods
 
-    //[Benchmark]
-    //public void Ref1()
-    //{
-    //    //var list = new List<ResultRef<MyData, RefError>>(Count);
-    //    for (var i = 0; i < Count; i++)
-    //    {
-    //        var a = ReturnRef_1();
-    //        if (a.IsError(out var error))
-    //        {
-    //            var code = error.Code;
-    //        }
-    //        //list.Add(a);
-    //    }
-    //}
+    [Benchmark]
+    public void Ref1()
+    {
+        //var list = new List<ResultRef<MyData, RefError>>(Count);
+        for (var i = 0; i < Count; i++)
+        {
+            var a = ReturnRef_1();
+            if (a.IsError(out var error))
+            {
+                var code = error.Code;
+            }
+            //list.Add(a);
+        }
+    }
 
-    //[Benchmark]
-    //public void Ref2()
-    //{
-    //    //var list = new List<ResultRef<MyData, RefError>>(Count);
-    //    for (var i = 0; i < Count; i++)
-    //    {
-    //        var a = ReturnRef_2();
-    //        if (a.IsError(out var error))
-    //        {
-    //            var code = error.Code;
-    //        }
-    //        //list.Add(a);
-    //    }
-    //}
+    [Benchmark]
+    public void Ref2()
+    {
+        //var list = new List<ResultRef<MyData, RefError>>(Count);
+        for (var i = 0; i < Count; i++)
+        {
+            var a = ReturnRef_2();
+            if (a.IsError(out var error))
+            {
+                var code = error.Code;
+            }
+            //list.Add(a);
+        }
+    }
 
     [Benchmark]
     public void Ref3()
@@ -104,35 +104,35 @@ public class Benchmarks
         }
     }
 
-    //[Benchmark(Baseline = true)]
-    //public void Struct1()
-    //{
-    //    //var list = new List<Result<MyData, BaseError>>(Count);
-    //    for (var i = 0; i < Count; i++)
-    //    {
-    //        var a = Return_1();
-    //        if (a.IsError(out var error))
-    //        {
-    //            var code = error.Value.Code;
-    //        }
-    //        //list.Add(a);
-    //    }
-    //}
+    [Benchmark(Baseline = true)]
+    public void Struct1()
+    {
+        //var list = new List<Result<MyData, BaseError>>(Count);
+        for (var i = 0; i < Count; i++)
+        {
+            var a = Return_1();
+            if (a.IsError(out var error))
+            {
+                var code = error.Value.Code;
+            }
+            //list.Add(a);
+        }
+    }
 
-    //[Benchmark]
-    //public void Struct2()
-    //{
-    //    //var list = new List<Result<MyData, BaseError>>(Count);
-    //    for (var i = 0; i < Count; i++)
-    //    {
-    //        var a = Return_2();
-    //        if (a.IsError(out var error))
-    //        {
-    //            var code = error.Value.Code;
-    //        }
-    //        //list.Add(a);
-    //    }
-    //}
+    [Benchmark]
+    public void Struct2()
+    {
+        //var list = new List<Result<MyData, BaseError>>(Count);
+        for (var i = 0; i < Count; i++)
+        {
+            var a = Return_2();
+            if (a.IsError(out var error))
+            {
+                var code = error.Value.Code;
+            }
+            //list.Add(a);
+        }
+    }
 
     [Benchmark]
     public void Struct3()
@@ -149,20 +149,21 @@ public class Benchmarks
         }
     }
 
+    [Benchmark]
+    public void StructSmall()
+    {
+        //var list = new List<Result<MyData, FileError>>(Count);
+        for (var i = 0; i < Count; i++)
+        {
+            var a = Return_FileError();
+            if (a.IsError(out var error))
+            {
+                var code = error.Value.Code;
+            }
+            //list.Add(a);
+        }
+    }
+
     #endregion
 
-    //[Benchmark]
-    //public void StructSmall()
-    //{
-    //    //var list = new List<Result<MyData, FileError>>(Count);
-    //    for (var i = 0; i < Count; i++)
-    //    {
-    //        var a = Return_FileError();
-    //        if (a.IsError(out var error))
-    //        {
-    //            var code = error.Value.Code;
-    //        }
-    //        //list.Add(a);
-    //    }
-    //}
 }
