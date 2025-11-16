@@ -3,6 +3,8 @@
   <PropertyGroup>
     <UseArtifactsOutput>true</UseArtifactsOutput>
     <AnalysisMode>All</AnalysisMode>
+
+    <Version>0.4.0</Version>
   </PropertyGroup>
 
 </Project>

@@ -4,12 +4,10 @@
 		<TargetFramework>net9.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<RootNamespace>ResultCore</RootNamespace>
-		<AssemblyName>ResultCore</AssemblyName>
 		<LangVersion>latest</LangVersion>
 
 		<PackageId>$(AssemblyName).J</PackageId>
-		<Description>A library used for wrap return value or errors.</Description>
+		<Description>A library used for wrap return value or errors. Integration Microsoft.Orleans.Serialization</Description>
 		<Authors>jerviscui</Authors>
 		<Company>$(Authors)</Company>
 		<Product>$(AssemblyName).J</Product>
@@ -26,9 +24,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Include="..\..\README.md">
-			<Pack>True</Pack>
-			<PackagePath>\</PackagePath>
-		</None>
+		<Compile Include="..\ResultCore\IError.cs" Link="IError.cs" />
+		<Compile Include="..\ResultCore\ResultExtensions.cs" Link="ResultExtensions.cs" />
 	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.11" />
+		<PackageReference Include="Microsoft.Orleans.Serialization" Version="9.2.1" />
+	</ItemGroup>
+
 </Project>
