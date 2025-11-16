@@ -13,13 +13,6 @@ public static class Program
 
     public static void Main()
     {
-        var a = Benchmarks.ReturnRef_2();
-
-        var b = Benchmarks.Return_2();
-        var b2 = Benchmarks.Return_3();
-
-        var c = Benchmarks.Return_FileError();
-
         //var a = DefaultConfig.Instance.ArtifactsPath;
         //D:\Project\Result\artifacts\bin\ResultCore.Tests\release\BenchmarkDotNet.Artifacts
 

@@ -67,6 +67,7 @@ public readonly record struct Result<TData, TError>
         return ref _error;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Deconstruct(out TData? data, out TError? error)
     {
         data = Data;
@@ -95,16 +96,16 @@ public readonly record struct Result<TData, TError>
         "Critical Code Smell",
         "S3874:\"out\" and \"ref\" parameters should not be used",
         Justification = "<Pending>")]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool IsError([NotNullWhen(true)] out TError? error)
     {
-        error = null;
-
         if (_hasError)
         {
             error = _error;
             return true;
         }
 
+        error = null;
         return false;
     }
 
@@ -120,17 +121,17 @@ public readonly record struct Result<TData, TError>
         "Critical Code Smell",
         "S3874:\"out\" and \"ref\" parameters should not be used",
         Justification = "<Pending>")]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool IsError([NotNullWhen(true)] out TError? error, [NotNullWhen(false)] out TData? data)
     {
-        data = null;
-        error = null;
-
         if (_hasError)
         {
             error = _error;
+            data = null;
             return true;
         }
 
+        error = null;
         Debug.Assert(Data != null, $"{nameof(Data)} != null");
         data = Data;
         return false;
@@ -232,16 +233,16 @@ public readonly record struct Result<TError>
         "Critical Code Smell",
         "S3874:\"out\" and \"ref\" parameters should not be used",
         Justification = "<Pending>")]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool IsError([NotNullWhen(true)] out TError? error)
     {
-        error = null;
-
         if (_hasError)
         {
             error = _error;
             return true;
         }
 
+        error = null;
         return false;
     }
 

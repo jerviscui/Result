@@ -26,7 +26,7 @@ public class ResultTest
         return Result.Ok;
     }
 
-    private static Result<MyClass, BaseError> Return_ResultData_Error_Test()
+    private static Result<MyData, BaseError> Return_ResultData_Error_Test()
     {
         // way 1
         var result1 = new Result<BaseError>(BaseErrorCode.NotFound);
@@ -40,9 +40,9 @@ public class ResultTest
         return result;
     }
 
-    private static Result<MyClass, BaseError> Return_ResultData_Ok_Test()
+    private static Result<MyData, BaseError> Return_ResultData_Ok_Test()
     {
-        return new MyClass("test");
+        return new MyData("test");
     }
 
     #endregion

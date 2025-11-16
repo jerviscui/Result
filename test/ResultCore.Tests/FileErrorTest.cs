@@ -81,9 +81,9 @@ public class FileErrorTest
         return result;
     }
 
-    private static Result<MyClass, FileError> ResultData_FileError_Failed()
+    private static Result<MyData, FileError> ResultData_FileError_Failed()
     {
-        Result<MyClass, FileError> error = FileError.Result(FileErrorCode.B);
+        Result<MyData, FileError> error = FileError.Result(FileErrorCode.B);
 
         TypeLayout.PrintLayout(error.GetType(), true);
         //Type layout for 'Result`2'
@@ -104,7 +104,7 @@ public class FileErrorTest
         //| |======================================================| |
         //|==========================================================|
 
-        Result<MyClass, BaseError> r2 = BaseError.Result(BaseErrorCode.NotFound);
+        Result<MyData, BaseError> r2 = BaseError.Result(BaseErrorCode.NotFound);
         TypeLayout.PrintLayout(r2.GetType(), true);
         //Type layout for 'Result`2'
         //Size: 40 bytes. Paddings: 11 bytes (%27 of empty space)
@@ -133,9 +133,9 @@ public class FileErrorTest
         return error;
     }
 
-    private static Result<MyClass, FileError> ResultData_FileError_Success()
+    private static Result<MyData, FileError> ResultData_FileError_Success()
     {
-        Result<MyClass, FileError> result = new MyClass("abc");
+        Result<MyData, FileError> result = new MyData("abc");
 
         TypeLayout.PrintLayout(result.GetType(), true);
         //Type layout for 'Result`2'

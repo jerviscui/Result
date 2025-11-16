@@ -1,8 +1,8 @@
 namespace ResultCore.Tests;
 
-public sealed class MyClass
+public sealed class MyData
 {
-    public MyClass(string name)
+    public MyData(string name)
     {
         Name = name;
     }

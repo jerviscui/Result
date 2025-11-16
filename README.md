@@ -22,3 +22,8 @@ Result is a lightweight library designed to simplify error handling in C# applic
 * BenchmarkDotNet.Aritfacts.2025-11-15_15-18-51Z
     * `Result<MyClass, BaseError>` 大小为 40 byte。`Result<MyClass, FileError>` 大小为 32 byte。
     * 不调用 `list.Add()`，不创建 list
+
+* BenchmarkDotNet.Aritfacts.2025-11-16_16-55-59Z
+    * `Result<MyClass, BaseError>` 大小为 40 byte。`Result<MyClass, FileError>` 大小为 32 byte。
+    * 不调用 `list.Add()`，不创建 list
+    * 输出 Inline

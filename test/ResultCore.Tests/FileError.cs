@@ -1,5 +1,3 @@
-using System.Runtime.CompilerServices;
-
 namespace ResultCore.Tests;
 
 public enum FileErrorCode
@@ -17,22 +15,6 @@ public readonly record struct FileError(FileErrorCode Code, string? Reason = nul
 
     #region Constants & Statics
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static implicit operator FileError(FileErrorCode errorCode) => new(errorCode);
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Result<FileError> Result()
-    {
-        return new Result<FileError>(new FileError());
-    }
-
-    [MethodImpl(MethodImplOptions.NoInlining)]
-    public static Result<FileError> Result(FileErrorCode code)
-    {
-        return new Result<FileError>(new FileError(code));
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result<FileError> Result(FileErrorCode code, string? reason = null)
     {
         return new Result<FileError>(new FileError(code, reason));
@@ -40,8 +22,23 @@ public readonly record struct FileError(FileErrorCode Code, string? Reason = nul
 
     #endregion
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public FileError() : this(FileErrorCode.A)
     {
     }
+
+    #region IError implementations
+
+    public static Result<FileError> Result()
+    {
+        return new Result<FileError>(new FileError());
+    }
+
+    public static Result<FileError> Result(FileErrorCode code)
+    {
+        return new Result<FileError>(new FileError(code));
+    }
+
+    #endregion
+
+    public static implicit operator FileError(FileErrorCode errorCode) => new(errorCode);
 }

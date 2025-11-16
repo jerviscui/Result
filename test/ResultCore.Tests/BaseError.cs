@@ -48,14 +48,12 @@ public enum BaseErrorCode
 public readonly record struct BaseError(BaseErrorCode Code, string? Reason = null, Exception? Exception = null)
     : IBaseError<BaseError, BaseErrorCode>
 {
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public BaseError() : this(BaseErrorCode.Failed)
     {
     }
 
     #region IBaseError implementations
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result<BaseError> Result(BaseErrorCode code, string? reason = null, Exception? exception = null)
     {
         return new Result<BaseError>(new BaseError(code, reason, exception));
@@ -65,13 +63,11 @@ public readonly record struct BaseError(BaseErrorCode Code, string? Reason = nul
 
     #region IError implementations
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result<BaseError> Result()
     {
         return new Result<BaseError>(new BaseError());
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result<BaseError> Result(BaseErrorCode code)
     {
         return new Result<BaseError>(new BaseError(code));
@@ -79,6 +75,5 @@ public readonly record struct BaseError(BaseErrorCode Code, string? Reason = nul
 
     #endregion
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static implicit operator BaseError(BaseErrorCode errorCode) => new(errorCode);
 }
