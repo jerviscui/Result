@@ -33,6 +33,7 @@
   <ItemGroup>
     <Compile Include="..\ResultCore\IError.cs" Link="IError.cs" />
     <Compile Include="..\ResultCore\ResultExtensions.cs" Link="ResultExtensions.cs" />
+    <Compile Include="..\ResultCore\TaskResultExtensions.cs" Link="TaskResultExtensions.cs" />
   </ItemGroup>
 
   <ItemGroup>

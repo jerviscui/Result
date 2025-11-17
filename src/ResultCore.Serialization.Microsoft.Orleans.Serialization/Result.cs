@@ -147,13 +147,22 @@ public readonly record struct Result<TData, TError>
     #endregion
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static implicit operator Result<TData, TError>(in Result<TError> result) => new(in result.UnwrapError());
+    public static implicit operator Result<TData, TError>(in Result<TError> result) =>
+                                        new(in result.UnwrapErrorWithoutCheck());
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static implicit operator Result<TData, TError>(TData data) => new(data);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static implicit operator Result<TData, TError>(in TError error) => new(in error);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static implicit operator Task<Result<TData, TError>>(Result<TData, TError> result) =>
+                                        Task.FromResult(result);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static implicit operator ValueTask<Result<TData, TError>>(Result<TData, TError> result) =>
+                                        ValueTask.FromResult(result);
 }
 
 /// <summary>
@@ -265,6 +274,12 @@ public readonly record struct Result<TError>
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static implicit operator Result<TError>(in TError error) => new(in error);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static implicit operator Task<Result<TError>>(Result<TError> result) => Task.FromResult(result);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static implicit operator ValueTask<Result<TError>>(Result<TError> result) => ValueTask.FromResult(result);
 }
 
 public enum Result
