@@ -60,37 +60,37 @@ public class ResultTest
     private static Task<Result<BaseError>> Return_Task_Result_Ok_TestAsync()
     {
         // way 1
-        //var result = BaseError.Result(BaseErrorCode.NotFound);
-        ////do sth.
-        //result = Result.Ok;
-        //return result;
+        var result = BaseError.Result(BaseErrorCode.NotFound);
+        //do sth.
+        result = Result.Ok;
+        return result;
 
         // way 2
-        return Result.Ok.AsTask<BaseError>();
+        //return Result.Ok.AsTask<BaseError>();
     }
 
     private static Task<Result<MyData, BaseError>> Return_Task_ResultData_Error_TestAsync()
     {
         // way 1
-        //Result<MyData, BaseError> result1 = BaseError.Result(BaseErrorCode.NotFound);
-        //return result1;
+        Result<MyData, BaseError> result1 = BaseError.Result(BaseErrorCode.NotFound);
+        return result1;
 
         // way 2
-        var result2 = BaseError.Result(BaseErrorCode.NotFound);
-        return result2.AsTask<MyData, BaseError>();
+        //var result2 = BaseError.Result(BaseErrorCode.NotFound);
+        //return result2.AsTask<MyData, BaseError>();
     }
 
     private static Task<Result<MyData, BaseError>> Return_Task_ResultData_Ok_TestAsync()
     {
         // way 1
-        //Result<MyData, BaseError> result1 = BaseError.Result(BaseErrorCode.NotFound);
-        ////do sth.
-        //result1 = new MyData("test");
-        //return result1;
+        Result<MyData, BaseError> result1 = BaseError.Result(BaseErrorCode.NotFound);
+        //do sth.
+        result1 = new MyData("test");
+        return result1;
 
         // way 2
-        var data = new MyData("test");
-        return data.AsTask<MyData, BaseError>();
+        //var data = new MyData("test");
+        //return data.AsTask<MyData, BaseError>();
     }
 
     #endregion

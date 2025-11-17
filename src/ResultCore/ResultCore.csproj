@@ -1,34 +1,38 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-		<RootNamespace>ResultCore</RootNamespace>
-		<AssemblyName>ResultCore</AssemblyName>
-		<LangVersion>latest</LangVersion>
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>ResultCore</RootNamespace>
+    <AssemblyName>ResultCore</AssemblyName>
+    <LangVersion>latest</LangVersion>
 
-		<PackageId>$(AssemblyName).J</PackageId>
-		<Description>A library used for wrap return value or errors.</Description>
-		<Authors>jerviscui</Authors>
-		<Company>$(Authors)</Company>
-		<Product>$(AssemblyName).J</Product>
-		<Copyright>Copyright 2025 $(Authors)</Copyright>
-		<PackageIcon></PackageIcon>
-		<PackageProjectUrl>https://github.com/jerviscui/Result</PackageProjectUrl>
-		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<RepositoryType>git</RepositoryType>
-		<RepositoryUrl>https://github.com/jerviscui/Result</RepositoryUrl>
-		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-		<IsPackable>True</IsPackable>
-	</PropertyGroup>
+    <PackageId>$(AssemblyName).J</PackageId>
+    <Description>A library used for wrap return value or errors.</Description>
+    <Authors>jerviscui</Authors>
+    <Company>$(Authors)</Company>
+    <Product>$(AssemblyName).J</Product>
+    <Copyright>Copyright 2025 $(Authors)</Copyright>
+    <PackageIcon></PackageIcon>
+    <PackageProjectUrl>https://github.com/jerviscui/Result</PackageProjectUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/jerviscui/Result</RepositoryUrl>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <IsPackable>True</IsPackable>
+  </PropertyGroup>
 
-	<ItemGroup>
-		<None Include="..\..\README.md">
-			<Pack>True</Pack>
-			<PackagePath>\</PackagePath>
-		</None>
-	</ItemGroup>
+  <ItemGroup>
+    <Compile Remove="TaskResultExtensions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 </Project>
