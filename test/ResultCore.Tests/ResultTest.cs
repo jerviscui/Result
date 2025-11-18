@@ -105,7 +105,20 @@ public class ResultTest
         // way 1
         if (result.IsError())
         {
-            result.UnwrapError().Code.ShouldBe(BaseErrorCode.NotFound);
+            switch (result.UnwrapError().Code)
+            {
+                case BaseErrorCode.Failure:
+                    break;
+                case BaseErrorCode.Failed:
+                    break;
+                case BaseErrorCode.NotFound:
+                    break;
+                default:
+                    throw ImpossibleException.Instance;
+            }
+
+            ref readonly var error = ref result.UnwrapError();
+            error.Code.ShouldBe(BaseErrorCode.NotFound);
         }
 
         // way 2
@@ -152,6 +165,16 @@ public class ResultTest
         {
             err.ShouldNotBeNull().ShouldBe(BaseErrorCode.NotFound);
             my.ShouldBeNull();
+        }
+
+        if (data.IsError())
+        {
+            ref readonly var error = ref data.UnwrapError();
+            error.Code.ShouldBe(BaseErrorCode.NotFound);
+        }
+        else
+        {
+            data.Data.Name.ShouldBe("test");
         }
 
         var ok = Return_ResultData_Ok_Test();

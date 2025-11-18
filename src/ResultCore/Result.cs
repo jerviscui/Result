@@ -81,6 +81,7 @@ public readonly record struct Result<TData, TError>
     /// <c>true</c> if this instance is error; otherwise <c>false</c>.
     /// </returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [MemberNotNullWhen(false, nameof(Data))]
     public readonly bool IsError()
     {
         return _hasError;
