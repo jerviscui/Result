@@ -47,7 +47,7 @@ public class ResultTaskTest
 
         if (result.IsError())
         {
-            result.UnwrapError().Code.ShouldBe(BaseErrorCode.NotFound);
+            result.GetErrorRef().Code.ShouldBe(BaseErrorCode.NotFound);
         }
     }
 
@@ -58,7 +58,7 @@ public class ResultTaskTest
 
         if (result.IsError())
         {
-            result.UnwrapError().Code.ShouldBe(BaseErrorCode.NotFound);
+            result.GetErrorRef().Code.ShouldBe(BaseErrorCode.NotFound);
         }
     }
 
@@ -69,7 +69,7 @@ public class ResultTaskTest
 
         if (result.IsError())
         {
-            result.UnwrapError().Code.ShouldBe(BaseErrorCode.NotFound);
+            result.GetErrorRef().Code.ShouldBe(BaseErrorCode.NotFound);
         }
     }
 

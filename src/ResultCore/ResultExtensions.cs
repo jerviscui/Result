@@ -8,6 +8,43 @@ public static class ResultExtensions
     #region Constants & Statics
 
     /// <summary>
+    /// Unwraps the error.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">No have Error.</exception>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static ref readonly TError GetErrorRef<TData, TError>(this in Result<TData, TError> result)
+        where TData : class?
+        where TError : struct
+    {
+        if (!result._hasError)
+        {
+#pragma warning disable CA2201 // Do not raise reserved exception types
+            throw new InvalidOperationException("No have Error.");
+#pragma warning restore CA2201 // Do not raise reserved exception types
+        }
+
+        return ref result._error;
+    }
+
+    /// <summary>
+    /// Unwraps the error.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">No have Error.</exception>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static ref readonly TError GetErrorRef<TError>(this in Result<TError> result)
+        where TError : struct
+    {
+        if (!result._hasError)
+        {
+#pragma warning disable CA2201 // Do not raise reserved exception types
+            throw new InvalidOperationException("No have Error.");
+#pragma warning restore CA2201 // Do not raise reserved exception types
+        }
+
+        return ref result._error;
+    }
+
+    /// <summary>
     /// Sequences the specified results.
     /// </summary>
     /// <typeparam name="TData">The type of the data.</typeparam>
@@ -58,43 +95,6 @@ public static class ResultExtensions
         }
 
         return list;
-    }
-
-    /// <summary>
-    /// Unwraps the error.
-    /// </summary>
-    /// <exception cref="InvalidOperationException">No have Error.</exception>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ref readonly TError UnwrapError<TData, TError>(this in Result<TData, TError> result)
-        where TData : class?
-        where TError : struct
-    {
-        if (!result._hasError)
-        {
-#pragma warning disable CA2201 // Do not raise reserved exception types
-            throw new InvalidOperationException("No have Error.");
-#pragma warning restore CA2201 // Do not raise reserved exception types
-        }
-
-        return ref result._error;
-    }
-
-    /// <summary>
-    /// Unwraps the error.
-    /// </summary>
-    /// <exception cref="InvalidOperationException">No have Error.</exception>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ref readonly TError UnwrapError<TError>(this in Result<TError> result)
-        where TError : struct
-    {
-        if (!result._hasError)
-        {
-#pragma warning disable CA2201 // Do not raise reserved exception types
-            throw new InvalidOperationException("No have Error.");
-#pragma warning restore CA2201 // Do not raise reserved exception types
-        }
-
-        return ref result._error;
     }
 
     #endregion

@@ -105,7 +105,7 @@ public class ResultTest
         // way 1
         if (result.IsError())
         {
-            switch (result.UnwrapError().Code)
+            switch (result.GetErrorRef().Code)
             {
                 case BaseErrorCode.Failure:
                     break;
@@ -117,7 +117,7 @@ public class ResultTest
                     throw ImpossibleException.Instance;
             }
 
-            ref readonly var error = ref result.UnwrapError();
+            ref readonly var error = ref result.GetErrorRef();
             error.Code.ShouldBe(BaseErrorCode.NotFound);
         }
 
@@ -152,7 +152,7 @@ public class ResultTest
         }
         else
         {
-            _ = Should.Throw<InvalidOperationException>(() => ok.UnwrapError());
+            _ = Should.Throw<InvalidOperationException>(() => ok.GetErrorRef());
         }
     }
 
@@ -169,7 +169,7 @@ public class ResultTest
 
         if (data.IsError())
         {
-            ref readonly var error = ref data.UnwrapError();
+            ref readonly var error = ref data.GetErrorRef();
             error.Code.ShouldBe(BaseErrorCode.NotFound);
         }
         else
@@ -223,7 +223,7 @@ public class ResultTest
         }
         else
         {
-            _ = Should.Throw<InvalidOperationException>(() => ok.UnwrapError());
+            _ = Should.Throw<InvalidOperationException>(() => ok.GetErrorRef());
         }
     }
 
