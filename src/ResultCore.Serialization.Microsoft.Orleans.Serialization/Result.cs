@@ -68,17 +68,26 @@ public readonly record struct Result<TData, TError>
 
     [UnscopedRef]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal ref readonly TError UnwrapErrorWithoutCheck()
+    internal ref readonly TError GetErrorRefUnsafe()
     {
         Debug.Assert(_hasError, $"{nameof(_hasError)} is true");
         return ref _error;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void Deconstruct(out TData? data, out TError? error)
+    public void Deconstruct(out bool isError, out TError error, out TData? data)
     {
-        data = Data;
-        error = _hasError ? _error : null;
+        isError = _hasError;
+        if (_hasError)
+        {
+            error = _error;
+            data = null;
+        }
+        else
+        {
+            error = default;
+            data = Data;
+        }
     }
 
     /// <summary>
@@ -88,6 +97,7 @@ public readonly record struct Result<TData, TError>
     /// <c>true</c> if this instance is error; otherwise <c>false</c>.
     /// </returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [MemberNotNullWhen(false, nameof(Data))]
     public readonly bool IsError()
     {
         return _hasError;
@@ -148,7 +158,7 @@ public readonly record struct Result<TData, TError>
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static implicit operator Result<TData, TError>(in Result<TError> result) =>
-                                        new(in result.UnwrapErrorWithoutCheck());
+                                        new(in result.GetErrorRefUnsafe());
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static implicit operator Result<TData, TError>(TData data) => new(data);
@@ -226,7 +236,7 @@ public readonly record struct Result<TError>
 
     [UnscopedRef]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal ref readonly TError UnwrapErrorWithoutCheck()
+    internal ref readonly TError GetErrorRefUnsafe()
     {
         Debug.Assert(_hasError, $"{nameof(_hasError)} is true");
         return ref _error;
