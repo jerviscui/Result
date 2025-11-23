@@ -1,5 +1,19 @@
 namespace ResultCore;
 
+public interface IError
+{
+
+    #region Properties
+
+    /// <summary>
+    /// Gets the error code.
+    /// </summary>
+    public int Code { get; }
+
+    #endregion
+
+}
+
 public interface IError<TError, TCode>
     where TError : struct
 {

@@ -46,7 +46,7 @@ public enum BaseErrorCode
 
 //struct 24byte
 public readonly record struct BaseError(BaseErrorCode Code, string? Reason = null, Exception? Exception = null)
-    : IBaseError<BaseError, BaseErrorCode>
+    : IBaseError<BaseError, BaseErrorCode>, IError
 {
     public BaseError() : this(BaseErrorCode.Failed)
     {
@@ -62,6 +62,8 @@ public readonly record struct BaseError(BaseErrorCode Code, string? Reason = nul
     #endregion
 
     #region IError implementations
+
+    int IError.Code => (int)Code;
 
     public static Result<BaseError> Result()
     {
