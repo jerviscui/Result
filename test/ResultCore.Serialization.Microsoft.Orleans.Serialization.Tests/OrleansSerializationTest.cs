@@ -5,7 +5,7 @@ using System.Buffers;
 
 namespace ResultCore.Serialization.Microsoft.Orleans.Serialization.Tests;
 
-public class SerializationTest
+public class OrleansSerializationTest
 {
 
     #region Methods

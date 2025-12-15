@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\ResultCore.Serialization.Microsoft.Orleans.Serialization\ResultCore.Serialization.Microsoft.Orleans.Serialization.csproj" />
+    <ProjectReference Include="..\..\src\ResultCore.Serialization\ResultCore.Serialization.csproj" />
   </ItemGroup>
 
   <ItemGroup>

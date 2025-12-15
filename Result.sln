@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResultCore.Serialization.Mi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResultCore.Serialization.Microsoft.Orleans.Serialization.Tests", "test\ResultCore.Serialization.Microsoft.Orleans.Serialization.Tests\ResultCore.Serialization.Microsoft.Orleans.Serialization.Tests.csproj", "{D78236F0-5862-53F0-A1EB-0B525BA73A9A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResultCore.Serialization", "src\ResultCore.Serialization\ResultCore.Serialization.csproj", "{8C47FF40-D92C-4C61-82B9-963F3B29B91D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{D78236F0-5862-53F0-A1EB-0B525BA73A9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D78236F0-5862-53F0-A1EB-0B525BA73A9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D78236F0-5862-53F0-A1EB-0B525BA73A9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C47FF40-D92C-4C61-82B9-963F3B29B91D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C47FF40-D92C-4C61-82B9-963F3B29B91D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C47FF40-D92C-4C61-82B9-963F3B29B91D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C47FF40-D92C-4C61-82B9-963F3B29B91D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +52,7 @@ Global
 		{97543786-41AA-42B1-929B-B3333B3CC1E3} = {CA49A545-88C9-4B02-95C2-C7574E0A0443}
 		{7597CE34-B7F8-485C-807E-C8854CFD3AFA} = {4204EE60-2D20-4881-B2DF-A7ACE8189F91}
 		{D78236F0-5862-53F0-A1EB-0B525BA73A9A} = {CA49A545-88C9-4B02-95C2-C7574E0A0443}
+		{8C47FF40-D92C-4C61-82B9-963F3B29B91D} = {4204EE60-2D20-4881-B2DF-A7ACE8189F91}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {346813CC-C23B-4414-90F8-01EC426CBA56}
