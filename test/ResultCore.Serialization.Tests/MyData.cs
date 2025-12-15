@@ -1,10 +1,12 @@
+using MessagePack;
 using Orleans;
 
-namespace ResultCore.Serialization.Microsoft.Orleans.Serialization.Tests;
+namespace ResultCore.Serialization.Tests;
 
 [GenerateSerializer]
-[Alias("ResultCore.Serialization.Microsoft.Orleans.Serialization.MyData")]
 [Immutable]
+[Alias("ResultCore.Serialization.Tests.MyData")]
+[MessagePackObject]
 public sealed class MyData
 {
     public MyData(string name)
@@ -15,6 +17,7 @@ public sealed class MyData
     #region Properties
 
     [Id(0)]
+    [Key(0)]
     public string Name { get; set; }
 
     #endregion

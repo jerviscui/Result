@@ -1,6 +1,7 @@
+using MessagePack;
 using Orleans;
 
-namespace ResultCore.Serialization.Microsoft.Orleans.Serialization.Tests;
+namespace ResultCore.Serialization.Tests;
 
 public enum FileErrorCode
 {
@@ -13,19 +14,12 @@ public enum FileErrorCode
 
 //struct 16byte
 [GenerateSerializer]
-[Alias("ResultCore.Serialization.Microsoft.Orleans.Serialization.FileError")]
 [Immutable]
-public readonly record struct FileError(FileErrorCode Code, string? Reason = null) : IError<FileError, FileErrorCode>
+[Alias("ResultCore.Serialization.Tests.FileError")]
+[MessagePackObject]
+public readonly record struct FileError([property: Key(0)] FileErrorCode Code, [property: Key(1)] string? Reason = null)
+    : IError<FileError, FileErrorCode>
 {
-
-    #region Constants & Statics
-
-    public static Result<FileError> Result(FileErrorCode code, string? reason = null)
-    {
-        return new Result<FileError>(new FileError(code, reason));
-    }
-    #endregion
-
     public FileError() : this(FileErrorCode.A)
     {
     }
@@ -41,8 +35,8 @@ public readonly record struct FileError(FileErrorCode Code, string? Reason = nul
     {
         return new Result<FileError>(new FileError(code));
     }
+
     #endregion
 
     public static implicit operator FileError(FileErrorCode errorCode) => new(errorCode);
-
 }

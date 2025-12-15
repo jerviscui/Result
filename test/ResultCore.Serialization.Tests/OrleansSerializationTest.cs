@@ -3,7 +3,7 @@ using Orleans.Serialization;
 using Shouldly;
 using System.Buffers;
 
-namespace ResultCore.Serialization.Microsoft.Orleans.Serialization.Tests;
+namespace ResultCore.Serialization.Tests;
 
 public class OrleansSerializationTest
 {

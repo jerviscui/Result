@@ -4,7 +4,7 @@
     <UseArtifactsOutput>true</UseArtifactsOutput>
     <AnalysisMode>All</AnalysisMode>
 
-    <Version>0.4.5</Version>
+    <Version>0.4.6</Version>
   </PropertyGroup>
 
 </Project>

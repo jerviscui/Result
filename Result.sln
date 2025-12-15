@@ -11,11 +11,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResultCore", "src\ResultCor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResultCore.Tests", "test\ResultCore.Tests\ResultCore.Tests.csproj", "{97543786-41AA-42B1-929B-B3333B3CC1E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResultCore.Serialization.Microsoft.Orleans.Serialization", "src\ResultCore.Serialization.Microsoft.Orleans.Serialization\ResultCore.Serialization.Microsoft.Orleans.Serialization.csproj", "{7597CE34-B7F8-485C-807E-C8854CFD3AFA}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResultCore.Serialization.Microsoft.Orleans.Serialization.Tests", "test\ResultCore.Serialization.Microsoft.Orleans.Serialization.Tests\ResultCore.Serialization.Microsoft.Orleans.Serialization.Tests.csproj", "{D78236F0-5862-53F0-A1EB-0B525BA73A9A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResultCore.Serialization", "src\ResultCore.Serialization\ResultCore.Serialization.csproj", "{8C47FF40-D92C-4C61-82B9-963F3B29B91D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResultCore.Serialization.Tests", "test\ResultCore.Serialization.Tests\ResultCore.Serialization.Tests.csproj", "{E8CD070B-9AA1-42AB-B2E9-9EA05DC6C240}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,18 +29,14 @@ Global
 		{97543786-41AA-42B1-929B-B3333B3CC1E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97543786-41AA-42B1-929B-B3333B3CC1E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97543786-41AA-42B1-929B-B3333B3CC1E3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7597CE34-B7F8-485C-807E-C8854CFD3AFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7597CE34-B7F8-485C-807E-C8854CFD3AFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7597CE34-B7F8-485C-807E-C8854CFD3AFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7597CE34-B7F8-485C-807E-C8854CFD3AFA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D78236F0-5862-53F0-A1EB-0B525BA73A9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D78236F0-5862-53F0-A1EB-0B525BA73A9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D78236F0-5862-53F0-A1EB-0B525BA73A9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D78236F0-5862-53F0-A1EB-0B525BA73A9A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8C47FF40-D92C-4C61-82B9-963F3B29B91D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8C47FF40-D92C-4C61-82B9-963F3B29B91D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C47FF40-D92C-4C61-82B9-963F3B29B91D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C47FF40-D92C-4C61-82B9-963F3B29B91D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8CD070B-9AA1-42AB-B2E9-9EA05DC6C240}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8CD070B-9AA1-42AB-B2E9-9EA05DC6C240}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8CD070B-9AA1-42AB-B2E9-9EA05DC6C240}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8CD070B-9AA1-42AB-B2E9-9EA05DC6C240}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -50,9 +44,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{0CB9CED6-EFA6-49A5-BA67-E4B8F5B19AC8} = {4204EE60-2D20-4881-B2DF-A7ACE8189F91}
 		{97543786-41AA-42B1-929B-B3333B3CC1E3} = {CA49A545-88C9-4B02-95C2-C7574E0A0443}
-		{7597CE34-B7F8-485C-807E-C8854CFD3AFA} = {4204EE60-2D20-4881-B2DF-A7ACE8189F91}
-		{D78236F0-5862-53F0-A1EB-0B525BA73A9A} = {CA49A545-88C9-4B02-95C2-C7574E0A0443}
 		{8C47FF40-D92C-4C61-82B9-963F3B29B91D} = {4204EE60-2D20-4881-B2DF-A7ACE8189F91}
+		{E8CD070B-9AA1-42AB-B2E9-9EA05DC6C240} = {CA49A545-88C9-4B02-95C2-C7574E0A0443}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {346813CC-C23B-4414-90F8-01EC426CBA56}

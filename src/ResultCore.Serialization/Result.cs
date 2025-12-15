@@ -1,3 +1,4 @@
+using MessagePack;
 using Orleans;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -15,6 +16,7 @@ namespace ResultCore;
 [GenerateSerializer]
 [Alias("ResultCore.Result`2")]
 [Immutable]
+[MessagePackObject(AllowPrivate = true)]
 [StructLayout(LayoutKind.Auto)]
 [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
 public readonly record struct Result<TData, TError>
@@ -25,40 +27,31 @@ public readonly record struct Result<TData, TError>
     /// Gets the data.
     /// </summary>
     [Id(2)]
+    [Key(2)]
     public readonly TData? Data;
 
     /// <summary>
     /// Gets the error.
     /// </summary>
     [Id(0)]
+    [Key(0)]
     [JsonInclude]
     internal readonly TError _error;
 
     [Id(1)]
+    [Key(1)]
     [JsonInclude]
     internal readonly bool _hasError;
 
-    #region Constants & Statics
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static implicit operator Result<TData, TError>(in Result<TError> result) =>
-                                        new(in result.GetErrorRefUnsafe());
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static implicit operator Result<TData, TError>(TData data) => new(data);
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static implicit operator Result<TData, TError>(in TError error) => new(in error);
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static implicit operator Task<Result<TData, TError>>(Result<TData, TError> result) =>
-                                        Task.FromResult(result);
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static implicit operator ValueTask<Result<TData, TError>>(Result<TData, TError> result) =>
-                                        ValueTask.FromResult(result);
-
-    #endregion
+    [OrleansConstructor]
+    [SerializationConstructor]
+    [JsonConstructor]
+    internal Result(in TError error, bool hasError, TData? data)
+    {
+        _error = error;
+        _hasError = hasError;
+        Data = data;
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Result{TData, TError}"/> with default <typeparamref name="TError"/>.
@@ -181,6 +174,23 @@ public readonly record struct Result<TData, TError>
 
     #endregion
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static implicit operator Result<TData, TError>(in Result<TError> result) =>
+                                        new(in result.GetErrorRefUnsafe());
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static implicit operator Result<TData, TError>(TData data) => new(data);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static implicit operator Result<TData, TError>(in TError error) => new(in error);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static implicit operator Task<Result<TData, TError>>(Result<TData, TError> result) =>
+                                        Task.FromResult(result);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static implicit operator ValueTask<Result<TData, TError>>(Result<TData, TError> result) =>
+                                        ValueTask.FromResult(result);
 }
 
 /// <summary>
@@ -190,21 +200,12 @@ public readonly record struct Result<TData, TError>
 [GenerateSerializer]
 [Alias("ResultCore.Result`1")]
 [Immutable]
+[MessagePackObject(AllowPrivate = true)]
 [StructLayout(LayoutKind.Auto)]
 [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
 public readonly record struct Result<TError>
     where TError : struct
 {
-    /// <summary>
-    /// Gets the error.
-    /// </summary>
-    [Id(0)]
-    [JsonInclude]
-    internal readonly TError _error;
-
-    [Id(1)]
-    [JsonInclude]
-    internal readonly bool _hasError;
 
     #region Constants & Statics
 
@@ -213,19 +214,20 @@ public readonly record struct Result<TError>
     /// </summary>
     private static readonly Result<TError> Ok = new(true);
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static implicit operator Result<TError>(Result _) => Ok;
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static implicit operator Result<TError>(in TError error) => new(in error);
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static implicit operator Task<Result<TError>>(Result<TError> result) => Task.FromResult(result);
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static implicit operator ValueTask<Result<TError>>(Result<TError> result) => ValueTask.FromResult(result);
-
     #endregion
+
+    /// <summary>
+    /// Gets the error.
+    /// </summary>
+    [Id(0)]
+    [Key(0)]
+    [JsonInclude]
+    internal readonly TError _error;
+
+    [Id(1)]
+    [Key(1)]
+    [JsonInclude]
+    internal readonly bool _hasError;
 
 #pragma warning disable IDE0060 // Remove unused parameter
     private Result(bool isOk)
@@ -233,6 +235,15 @@ public readonly record struct Result<TError>
     {
         // just use for Ok
         _hasError = false;
+    }
+
+    [OrleansConstructor]
+    [SerializationConstructor]
+    [JsonConstructor]
+    internal Result(in TError error, bool hasError)
+    {
+        _error = error;
+        _hasError = hasError;
     }
 
     /// <summary>
@@ -300,6 +311,17 @@ public readonly record struct Result<TError>
 
     #endregion
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static implicit operator Result<TError>(Result _) => Ok;
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static implicit operator Result<TError>(in TError error) => new(in error);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static implicit operator Task<Result<TError>>(Result<TError> result) => Task.FromResult(result);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static implicit operator ValueTask<Result<TError>>(Result<TError> result) => ValueTask.FromResult(result);
 }
 
 public enum Result
