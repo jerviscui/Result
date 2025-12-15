@@ -28,6 +28,8 @@ public readonly record struct Result<TData, TError>
     /// </summary>
     [Id(2)]
     [Key(2)]
+    [JsonInclude]
+    [JsonPropertyName("data")]
     public readonly TData? Data;
 
     /// <summary>
@@ -36,17 +38,19 @@ public readonly record struct Result<TData, TError>
     [Id(0)]
     [Key(0)]
     [JsonInclude]
+    [JsonPropertyName("error")]
     internal readonly TError _error;
 
     [Id(1)]
     [Key(1)]
     [JsonInclude]
+    [JsonPropertyName("hasError")]
     internal readonly bool _hasError;
 
     [OrleansConstructor]
     [SerializationConstructor]
     [JsonConstructor]
-    internal Result(in TError error, bool hasError, TData? data)
+    internal Result(TError error, bool hasError, TData? data)
     {
         _error = error;
         _hasError = hasError;
@@ -222,11 +226,13 @@ public readonly record struct Result<TError>
     [Id(0)]
     [Key(0)]
     [JsonInclude]
+    [JsonPropertyName("error")]
     internal readonly TError _error;
 
     [Id(1)]
     [Key(1)]
     [JsonInclude]
+    [JsonPropertyName("hasError")]
     internal readonly bool _hasError;
 
 #pragma warning disable IDE0060 // Remove unused parameter
@@ -240,7 +246,7 @@ public readonly record struct Result<TError>
     [OrleansConstructor]
     [SerializationConstructor]
     [JsonConstructor]
-    internal Result(in TError error, bool hasError)
+    internal Result(TError error, bool hasError)
     {
         _error = error;
         _hasError = hasError;
