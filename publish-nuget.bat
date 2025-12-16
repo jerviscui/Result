@@ -10,7 +10,7 @@ dotnet clean >nul
 dotnet build --configuration Release >nul
 
 @cd %curdir%\src
-@cd ./ResultCore.Serialization.Microsoft.Orleans.Serialization
+@cd ./ResultCore.Serialization
 dotnet clean >nul
 dotnet build --configuration Release >nul
 
@@ -26,7 +26,7 @@ dotnet build --configuration Release >nul
 dotnet pack -c Release -o %curdir%\nupkgs --no-build >nul
 
 @cd %curdir%\src
-@cd ./ResultCore.Serialization.Microsoft.Orleans.Serialization
+@cd ./ResultCore.Serialization
 dotnet pack -c Release -o %curdir%\nupkgs --no-build >nul
 
 :: publish
