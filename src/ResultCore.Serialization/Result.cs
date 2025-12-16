@@ -17,6 +17,7 @@ namespace ResultCore;
 [Alias("ResultCore.Result`2")]
 [Immutable]
 [MessagePackObject(AllowPrivate = true)]
+[JsonConverter(typeof(ResultConverterFactory))]
 [StructLayout(LayoutKind.Auto)]
 [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Use field in struct")]
 public readonly record struct Result<TData, TError>
@@ -28,8 +29,6 @@ public readonly record struct Result<TData, TError>
     /// </summary>
     [Id(2)]
     [Key(2)]
-    [JsonInclude]
-    //[JsonPropertyName("data")]
     public readonly TData? Data;
 
     /// <summary>
@@ -37,21 +36,17 @@ public readonly record struct Result<TData, TError>
     /// </summary>
     [Id(0)]
     [Key(0)]
-    [JsonInclude]
-    //[JsonPropertyName("error")]
     internal readonly TError error;
 
     [Id(1)]
     [Key(1)]
-    [JsonInclude]
-    //[JsonPropertyName("hasError")]
     internal readonly bool hasError;
 
     [OrleansConstructor]
     [SerializationConstructor]
-    [JsonConstructor]
     internal Result(TError error, bool hasError, TData? data)
     {
+        // just use for Serialize
         this.error = error;
         this.hasError = hasError;
         Data = data;
@@ -205,6 +200,7 @@ public readonly record struct Result<TData, TError>
 [Alias("ResultCore.Result`1")]
 [Immutable]
 [MessagePackObject(AllowPrivate = true)]
+[JsonConverter(typeof(ResultConverterFactory))]
 [StructLayout(LayoutKind.Auto)]
 [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Use field in struct")]
 public readonly record struct Result<TError>
@@ -225,14 +221,10 @@ public readonly record struct Result<TError>
     /// </summary>
     [Id(0)]
     [Key(0)]
-    [JsonInclude]
-    [JsonPropertyName("error")]
     internal readonly TError error;
 
     [Id(1)]
     [Key(1)]
-    [JsonInclude]
-    [JsonPropertyName("hasError")]
     internal readonly bool hasError;
 
 #pragma warning disable IDE0060 // Remove unused parameter
@@ -245,9 +237,9 @@ public readonly record struct Result<TError>
 
     [OrleansConstructor]
     [SerializationConstructor]
-    [JsonConstructor]
     internal Result(TError error, bool hasError)
     {
+        // just use for Serialize
         this.error = error;
         this.hasError = hasError;
     }

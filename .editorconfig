@@ -1620,6 +1620,13 @@ dotnet_diagnostic.MsgPack017.severity = error
 dotnet_diagnostic.MsgPack018.severity = error
 
 ##########################################
+# source-generator syslib-diagnostics
+# https://learn.microsoft.com/zh-cn/dotnet/fundamentals/syslib-diagnostics/source-generator-overview
+##########################################
+
+dotnet_diagnostic.SYSLIB1038.severity = error
+
+##########################################
 # ReSharper properties
 ##########################################
 

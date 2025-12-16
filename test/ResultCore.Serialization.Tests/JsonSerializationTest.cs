@@ -6,6 +6,14 @@ using System.Text.Json.Serialization.Metadata;
 
 namespace ResultCore.Serialization.Tests;
 
+[JsonSerializable(typeof(Result<MyData, FileError>))]
+[JsonSerializable(typeof(Result<FileError>))]
+[JsonSerializable(typeof(MyData))]
+[JsonSerializable(typeof(FileError))]
+internal sealed partial class ResultSerializerContext : JsonSerializerContext
+{
+}
+
 public class JsonSerializationTest
 {
     private readonly JsonSerializerOptions? _options;
@@ -26,13 +34,13 @@ public class JsonSerializationTest
         var bufferWriter = new ArrayBufferWriter<byte>(1024);
         using var jsonWriter = new Utf8JsonWriter(bufferWriter);
 
-        Result<MyData, FileError> result = FileError.Result(FileErrorCode.A);
+        Result<MyData, FileError> result = FileError.Result(FileErrorCode.B);
         JsonSerializer.Serialize(jsonWriter, result, _options);
         jsonWriter.Flush();
         var jsonReader = new Utf8JsonReader(bufferWriter.WrittenSpan, default);
         var tmp = JsonSerializer.Deserialize<Result<MyData, FileError>>(ref jsonReader, _options);
         tmp.IsError(out var error).ShouldBeTrue();
-        error.Value.Code.ShouldBe(FileErrorCode.A);
+        error.Value.Code.ShouldBe(FileErrorCode.B);
 
         jsonWriter.Flush();
         bufferWriter.Clear();
@@ -49,24 +57,13 @@ public class JsonSerializationTest
     [Fact]
     public void Str_Test()
     {
-        Result<MyData, FileError> result = FileError.Result(FileErrorCode.A);
+        var result = FileError.Result(FileErrorCode.B);
         var str = JsonSerializer.Serialize(result, _options);
-        var tmp = JsonSerializer.Deserialize<Result<MyData, FileError>>(str, _options);
+        var tmp = JsonSerializer.Deserialize<Result<FileError>>(str, _options);
         tmp.IsError(out var error).ShouldBeTrue();
-        error.Value.Code.ShouldBe(FileErrorCode.A);
-
-        result = new MyData("aaa");
-        str = JsonSerializer.Serialize(result, _options);
-        tmp = JsonSerializer.Deserialize<Result<MyData, FileError>>(str, _options);
-        tmp.Data!.Name.ShouldBe("aaa");
+        error.Value.Code.ShouldBe(FileErrorCode.B);
     }
 
     #endregion
 
-}
-
-[JsonSourceGenerationOptions(IncludeFields = true, PropertyNameCaseInsensitive = true)]
-[JsonSerializable(typeof(Result<MyData, FileError>))]
-internal sealed partial class ResultSerializerContext : JsonSerializerContext
-{
 }
