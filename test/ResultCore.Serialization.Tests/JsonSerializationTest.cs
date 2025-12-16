@@ -1,6 +1,8 @@
 using Shouldly;
 using System.Buffers;
 using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 
 namespace ResultCore.Serialization.Tests;
 
@@ -10,7 +12,10 @@ public class JsonSerializationTest
 
     public JsonSerializationTest()
     {
-        _options = new JsonSerializerOptions(JsonSerializerDefaults.Web);
+        _options = new JsonSerializerOptions(JsonSerializerDefaults.Web)
+        {
+            TypeInfoResolver = JsonTypeInfoResolver.Combine(ResultSerializerContext.Default)
+        };
     }
 
     #region Methods
@@ -58,4 +63,10 @@ public class JsonSerializationTest
 
     #endregion
 
+}
+
+[JsonSourceGenerationOptions(IncludeFields = true, PropertyNameCaseInsensitive = true)]
+[JsonSerializable(typeof(Result<MyData, FileError>))]
+internal sealed partial class ResultSerializerContext : JsonSerializerContext
+{
 }
