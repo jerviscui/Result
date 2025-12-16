@@ -16,14 +16,14 @@ public static class ResultExtensions
         where TData : class?
         where TError : struct
     {
-        if (!result._hasError)
+        if (!result.hasError)
         {
 #pragma warning disable CA2201 // Do not raise reserved exception types
             throw new InvalidOperationException("No have Error.");
 #pragma warning restore CA2201 // Do not raise reserved exception types
         }
 
-        return ref result._error;
+        return ref result.error;
     }
 
     /// <summary>
@@ -34,14 +34,14 @@ public static class ResultExtensions
     public static ref readonly TError GetErrorRef<TError>(this in Result<TError> result)
         where TError : struct
     {
-        if (!result._hasError)
+        if (!result.hasError)
         {
 #pragma warning disable CA2201 // Do not raise reserved exception types
             throw new InvalidOperationException("No have Error.");
 #pragma warning restore CA2201 // Do not raise reserved exception types
         }
 
-        return ref result._error;
+        return ref result.error;
     }
 
     /// <summary>

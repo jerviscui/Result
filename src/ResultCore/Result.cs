@@ -24,9 +24,9 @@ public readonly record struct Result<TData, TError>
     /// <summary>
     /// Gets the error.
     /// </summary>
-    internal readonly TError _error;
+    internal readonly TError error;
 
-    internal readonly bool _hasError;
+    internal readonly bool hasError;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Result{TData, TError}"/> with default <typeparamref name="TError"/>.
@@ -43,7 +43,7 @@ public readonly record struct Result<TData, TError>
     public Result(TData data)
     {
         Data = data;
-        _hasError = false;
+        hasError = false;
     }
 
     /// <summary>
@@ -53,8 +53,8 @@ public readonly record struct Result<TData, TError>
     /// <param name="error">The error.</param>
     public Result(in TError error)
     {
-        _error = error;
-        _hasError = true;
+        this.error = error;
+        hasError = true;
     }
 
     #region Methods
@@ -63,17 +63,17 @@ public readonly record struct Result<TData, TError>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal ref readonly TError GetErrorRefUnsafe()
     {
-        Debug.Assert(_hasError, $"{nameof(_hasError)} is true");
-        return ref _error;
+        Debug.Assert(hasError, $"{nameof(hasError)} is true");
+        return ref error;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Deconstruct(out bool isError, out TError error, out TData? data)
     {
-        isError = _hasError;
-        if (_hasError)
+        isError = hasError;
+        if (hasError)
         {
-            error = _error;
+            error = this.error;
             data = null;
         }
         else
@@ -93,7 +93,7 @@ public readonly record struct Result<TData, TError>
     [MemberNotNullWhen(false, nameof(Data))]
     public readonly bool IsError()
     {
-        return _hasError;
+        return hasError;
     }
 
     /// <summary>
@@ -109,9 +109,9 @@ public readonly record struct Result<TData, TError>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool IsError([NotNullWhen(true)] out TError? error)
     {
-        if (_hasError)
+        if (hasError)
         {
-            error = _error;
+            error = this.error;
             return true;
         }
 
@@ -134,9 +134,9 @@ public readonly record struct Result<TData, TError>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool IsError([NotNullWhen(true)] out TError? error, [NotNullWhen(false)] out TData? data)
     {
-        if (_hasError)
+        if (hasError)
         {
-            error = _error;
+            error = this.error;
             data = null;
             return true;
         }
@@ -190,16 +190,16 @@ public readonly record struct Result<TError>
     /// <summary>
     /// Gets the error.
     /// </summary>
-    internal readonly TError _error;
+    internal readonly TError error;
 
-    internal readonly bool _hasError;
+    internal readonly bool hasError;
 
 #pragma warning disable IDE0060 // Remove unused parameter
     private Result(bool isOk)
 #pragma warning restore IDE0060 // Remove unused parameter
     {
         // just use for Ok
-        _hasError = false;
+        hasError = false;
     }
 
     /// <summary>
@@ -216,8 +216,8 @@ public readonly record struct Result<TError>
     /// <param name="error">The error.</param>
     public Result(in TError error)
     {
-        _error = error;
-        _hasError = true;
+        this.error = error;
+        hasError = true;
     }
 
     #region Methods
@@ -226,8 +226,8 @@ public readonly record struct Result<TError>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal ref readonly TError GetErrorRefUnsafe()
     {
-        Debug.Assert(_hasError, $"{nameof(_hasError)} is true");
-        return ref _error;
+        Debug.Assert(hasError, $"{nameof(hasError)} is true");
+        return ref error;
     }
 
     /// <summary>
@@ -239,7 +239,7 @@ public readonly record struct Result<TError>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool IsError()
     {
-        return _hasError;
+        return hasError;
     }
 
     /// <summary>
@@ -255,9 +255,9 @@ public readonly record struct Result<TError>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool IsError([NotNullWhen(true)] out TError? error)
     {
-        if (_hasError)
+        if (hasError)
         {
-            error = _error;
+            error = this.error;
             return true;
         }
 

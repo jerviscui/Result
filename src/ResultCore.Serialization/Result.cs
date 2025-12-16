@@ -18,7 +18,7 @@ namespace ResultCore;
 [Immutable]
 [MessagePackObject(AllowPrivate = true)]
 [StructLayout(LayoutKind.Auto)]
-[SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
+[SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Use field in struct")]
 public readonly record struct Result<TData, TError>
     where TData : class?
     where TError : struct
@@ -29,7 +29,7 @@ public readonly record struct Result<TData, TError>
     [Id(2)]
     [Key(2)]
     [JsonInclude]
-    [JsonPropertyName("data")]
+    //[JsonPropertyName("data")]
     public readonly TData? Data;
 
     /// <summary>
@@ -38,22 +38,22 @@ public readonly record struct Result<TData, TError>
     [Id(0)]
     [Key(0)]
     [JsonInclude]
-    [JsonPropertyName("error")]
-    internal readonly TError _error;
+    //[JsonPropertyName("error")]
+    internal readonly TError error;
 
     [Id(1)]
     [Key(1)]
     [JsonInclude]
-    [JsonPropertyName("hasError")]
-    internal readonly bool _hasError;
+    //[JsonPropertyName("hasError")]
+    internal readonly bool hasError;
 
     [OrleansConstructor]
     [SerializationConstructor]
     [JsonConstructor]
     internal Result(TError error, bool hasError, TData? data)
     {
-        _error = error;
-        _hasError = hasError;
+        this.error = error;
+        this.hasError = hasError;
         Data = data;
     }
 
@@ -72,7 +72,7 @@ public readonly record struct Result<TData, TError>
     public Result(TData data)
     {
         Data = data;
-        _hasError = false;
+        hasError = false;
     }
 
     /// <summary>
@@ -82,8 +82,8 @@ public readonly record struct Result<TData, TError>
     /// <param name="error">The error.</param>
     public Result(in TError error)
     {
-        _error = error;
-        _hasError = true;
+        this.error = error;
+        hasError = true;
     }
 
     #region Methods
@@ -92,17 +92,17 @@ public readonly record struct Result<TData, TError>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal ref readonly TError GetErrorRefUnsafe()
     {
-        Debug.Assert(_hasError, $"{nameof(_hasError)} is true");
-        return ref _error;
+        Debug.Assert(hasError, $"{nameof(hasError)} is true");
+        return ref error;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Deconstruct(out bool isError, out TError error, out TData? data)
     {
-        isError = _hasError;
-        if (_hasError)
+        isError = hasError;
+        if (hasError)
         {
-            error = _error;
+            error = this.error;
             data = null;
         }
         else
@@ -122,7 +122,7 @@ public readonly record struct Result<TData, TError>
     [MemberNotNullWhen(false, nameof(Data))]
     public readonly bool IsError()
     {
-        return _hasError;
+        return hasError;
     }
 
     /// <summary>
@@ -138,9 +138,9 @@ public readonly record struct Result<TData, TError>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool IsError([NotNullWhen(true)] out TError? error)
     {
-        if (_hasError)
+        if (hasError)
         {
-            error = _error;
+            error = this.error;
             return true;
         }
 
@@ -163,9 +163,9 @@ public readonly record struct Result<TData, TError>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool IsError([NotNullWhen(true)] out TError? error, [NotNullWhen(false)] out TData? data)
     {
-        if (_hasError)
+        if (hasError)
         {
-            error = _error;
+            error = this.error;
             data = null;
             return true;
         }
@@ -206,7 +206,7 @@ public readonly record struct Result<TData, TError>
 [Immutable]
 [MessagePackObject(AllowPrivate = true)]
 [StructLayout(LayoutKind.Auto)]
-[SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
+[SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Use field in struct")]
 public readonly record struct Result<TError>
     where TError : struct
 {
@@ -227,20 +227,20 @@ public readonly record struct Result<TError>
     [Key(0)]
     [JsonInclude]
     [JsonPropertyName("error")]
-    internal readonly TError _error;
+    internal readonly TError error;
 
     [Id(1)]
     [Key(1)]
     [JsonInclude]
     [JsonPropertyName("hasError")]
-    internal readonly bool _hasError;
+    internal readonly bool hasError;
 
 #pragma warning disable IDE0060 // Remove unused parameter
     private Result(bool isOk)
 #pragma warning restore IDE0060 // Remove unused parameter
     {
         // just use for Ok
-        _hasError = false;
+        hasError = false;
     }
 
     [OrleansConstructor]
@@ -248,8 +248,8 @@ public readonly record struct Result<TError>
     [JsonConstructor]
     internal Result(TError error, bool hasError)
     {
-        _error = error;
-        _hasError = hasError;
+        this.error = error;
+        this.hasError = hasError;
     }
 
     /// <summary>
@@ -266,8 +266,8 @@ public readonly record struct Result<TError>
     /// <param name="error">The error.</param>
     public Result(in TError error)
     {
-        _error = error;
-        _hasError = true;
+        this.error = error;
+        hasError = true;
     }
 
     #region Methods
@@ -276,8 +276,8 @@ public readonly record struct Result<TError>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal ref readonly TError GetErrorRefUnsafe()
     {
-        Debug.Assert(_hasError, $"{nameof(_hasError)} is true");
-        return ref _error;
+        Debug.Assert(hasError, $"{nameof(hasError)} is true");
+        return ref error;
     }
 
     /// <summary>
@@ -289,7 +289,7 @@ public readonly record struct Result<TError>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool IsError()
     {
-        return _hasError;
+        return hasError;
     }
 
     /// <summary>
@@ -305,9 +305,9 @@ public readonly record struct Result<TError>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool IsError([NotNullWhen(true)] out TError? error)
     {
-        if (_hasError)
+        if (hasError)
         {
-            error = _error;
+            error = this.error;
             return true;
         }
 
