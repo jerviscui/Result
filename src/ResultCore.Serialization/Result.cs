@@ -1,3 +1,4 @@
+using MemoryPack;
 using MessagePack;
 using Orleans;
 using System.Diagnostics;
@@ -13,6 +14,7 @@ namespace ResultCore;
 /// </summary>
 /// <typeparam name="TData">The type of the data.</typeparam>
 /// <typeparam name="TError">The type of the error.</typeparam>
+[MemoryPackable(SerializeLayout.Explicit)]
 [GenerateSerializer]
 [Alias("ResultCore.Result`2")]
 [Immutable]
@@ -20,13 +22,14 @@ namespace ResultCore;
 [JsonConverter(typeof(ResultConverterFactory))]
 [StructLayout(LayoutKind.Auto)]
 [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Use field in struct")]
-public readonly record struct Result<TData, TError>
+public readonly partial record struct Result<TData, TError>
     where TData : class?
     where TError : struct
 {
     /// <summary>
     /// Gets the data.
     /// </summary>
+    [MemoryPackOrder(2)]
     [Id(2)]
     [Key(2)]
     public readonly TData? Data;
@@ -34,14 +37,19 @@ public readonly record struct Result<TData, TError>
     /// <summary>
     /// Gets the error.
     /// </summary>
+    [MemoryPackInclude]
+    [MemoryPackOrder(0)]
     [Id(0)]
     [Key(0)]
     internal readonly TError error;
 
+    [MemoryPackInclude]
+    [MemoryPackOrder(1)]
     [Id(1)]
     [Key(1)]
     internal readonly bool hasError;
 
+    [MemoryPackConstructor]
     [OrleansConstructor]
     [SerializationConstructor]
     internal Result(TError error, bool hasError, TData? data)
@@ -123,13 +131,14 @@ public readonly record struct Result<TData, TError>
     /// <summary>
     /// Determines whether this instance is error.
     /// </summary>
+    /// <param name="error">output the <typeparamref name="TError"/> </param>
     /// <returns>
     /// <c>true</c> if this instance is error, and error must not be null; otherwise <c>false</c>.
     /// </returns>
     [SuppressMessage(
         "Critical Code Smell",
         "S3874:\"out\" and \"ref\" parameters should not be used",
-        Justification = "<Pending>")]
+        Justification = "Standard Try-Parse pattern implementation")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool IsError([NotNullWhen(true)] out TError? error)
     {
@@ -154,7 +163,7 @@ public readonly record struct Result<TData, TError>
     [SuppressMessage(
         "Critical Code Smell",
         "S3874:\"out\" and \"ref\" parameters should not be used",
-        Justification = "<Pending>")]
+        Justification = "Standard Try-Parse pattern implementation")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool IsError([NotNullWhen(true)] out TError? error, [NotNullWhen(false)] out TData? data)
     {
@@ -196,14 +205,15 @@ public readonly record struct Result<TData, TError>
 /// Wrap the error or return void.
 /// </summary>
 /// <typeparam name="TError">The type of the error.</typeparam>
+[MemoryPackable(SerializeLayout.Explicit)]
 [GenerateSerializer]
 [Alias("ResultCore.Result`1")]
 [Immutable]
 [MessagePackObject(AllowPrivate = true)]
 [JsonConverter(typeof(ResultConverterFactory))]
-[StructLayout(LayoutKind.Auto)]
+[StructLayout(LayoutKind.Sequential)]
 [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Use field in struct")]
-public readonly record struct Result<TError>
+public readonly partial record struct Result<TError>
     where TError : struct
 {
 
@@ -219,22 +229,25 @@ public readonly record struct Result<TError>
     /// <summary>
     /// Gets the error.
     /// </summary>
+    [MemoryPackInclude]
+    [MemoryPackOrder(0)]
     [Id(0)]
     [Key(0)]
     internal readonly TError error;
 
+    [MemoryPackInclude]
+    [MemoryPackOrder(1)]
     [Id(1)]
     [Key(1)]
     internal readonly bool hasError;
 
-#pragma warning disable IDE0060 // Remove unused parameter
-    private Result(bool isOk)
-#pragma warning restore IDE0060 // Remove unused parameter
+    private Result(bool _)
     {
         // just use for Ok
         hasError = false;
     }
 
+    [MemoryPackConstructor]
     [OrleansConstructor]
     [SerializationConstructor]
     internal Result(TError error, bool hasError)
@@ -287,13 +300,14 @@ public readonly record struct Result<TError>
     /// <summary>
     /// Determines whether this instance is error.
     /// </summary>
+    /// <param name="error">output the <typeparamref name="TError"/> </param>
     /// <returns>
     /// <c>true</c> if this instance is error, and error must not be null; otherwise, <c>false</c>.
     /// </returns>
     [SuppressMessage(
         "Critical Code Smell",
         "S3874:\"out\" and \"ref\" parameters should not be used",
-        Justification = "<Pending>")]
+        Justification = "Standard Try-Parse pattern implementation")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool IsError([NotNullWhen(true)] out TError? error)
     {
@@ -327,5 +341,5 @@ public enum Result
     /// <summary>
     /// No errors, just for return Result.
     /// </summary>
-    Ok
+    Ok = 0
 }

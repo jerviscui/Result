@@ -1,3 +1,4 @@
+using MemoryPack;
 using MessagePack;
 using Orleans;
 
@@ -13,13 +14,17 @@ public enum FileErrorCode
 }
 
 //struct 16byte
+[MemoryPackable]
 [GenerateSerializer]
 [Immutable]
 [Alias("ResultCore.Serialization.Tests.FileError")]
 [MessagePackObject]
-public readonly record struct FileError([property: Key(0)] FileErrorCode Code, [property: Key(1)] string? Reason = null)
+public readonly partial record struct FileError(
+    [property: Key(0)] FileErrorCode Code,
+    [property: Key(1)] string? Reason = null)
     : IError<FileError, FileErrorCode>
 {
+    [MemoryPackConstructor]
     public FileError() : this(FileErrorCode.A)
     {
     }

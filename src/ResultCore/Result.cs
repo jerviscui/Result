@@ -105,7 +105,7 @@ public readonly record struct Result<TData, TError>
     [SuppressMessage(
         "Critical Code Smell",
         "S3874:\"out\" and \"ref\" parameters should not be used",
-        Justification = "<Pending>")]
+        Justification = "Standard Try-Parse pattern implementation")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool IsError([NotNullWhen(true)] out TError? error)
     {
@@ -130,7 +130,7 @@ public readonly record struct Result<TData, TError>
     [SuppressMessage(
         "Critical Code Smell",
         "S3874:\"out\" and \"ref\" parameters should not be used",
-        Justification = "<Pending>")]
+        Justification = "Standard Try-Parse pattern implementation")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool IsError([NotNullWhen(true)] out TError? error, [NotNullWhen(false)] out TData? data)
     {
@@ -251,7 +251,7 @@ public readonly record struct Result<TError>
     [SuppressMessage(
         "Critical Code Smell",
         "S3874:\"out\" and \"ref\" parameters should not be used",
-        Justification = "<Pending>")]
+        Justification = "Standard Try-Parse pattern implementation")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool IsError([NotNullWhen(true)] out TError? error)
     {

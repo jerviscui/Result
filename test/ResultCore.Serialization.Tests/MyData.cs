@@ -1,14 +1,17 @@
+using MemoryPack;
 using MessagePack;
 using Orleans;
 
 namespace ResultCore.Serialization.Tests;
 
+[MemoryPackable]
 [GenerateSerializer]
 [Immutable]
 [Alias("ResultCore.Serialization.Tests.MyData")]
 [MessagePackObject]
-public sealed class MyData
+public sealed partial class MyData
 {
+    [MemoryPackConstructor]
     public MyData(string name)
     {
         Name = name;
