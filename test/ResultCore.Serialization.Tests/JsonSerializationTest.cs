@@ -10,9 +10,7 @@ namespace ResultCore.Serialization.Tests;
 [JsonSerializable(typeof(Result<FileError>))]
 [JsonSerializable(typeof(MyData))]
 [JsonSerializable(typeof(FileError))]
-internal sealed partial class ResultSerializerContext : JsonSerializerContext
-{
-}
+internal sealed partial class ResultSerializerContext : JsonSerializerContext;
 
 public class JsonSerializationTest
 {

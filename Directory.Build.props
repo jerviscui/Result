@@ -2,9 +2,20 @@
 
   <PropertyGroup>
     <UseArtifactsOutput>true</UseArtifactsOutput>
-    <AnalysisMode>All</AnalysisMode>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
 
     <Version>0.5.0</Version>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="10.27.0.140913">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Roslynator.Analyzers" Version="4.15.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 
 </Project>

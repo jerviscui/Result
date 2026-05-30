@@ -1,17 +1,34 @@
 <Project>
 
   <PropertyGroup>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AnalysisMode>All</AnalysisMode>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     <CompilerGeneratedFilesOutputPath>_Generated</CompilerGeneratedFilesOutputPath>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Remove="_Generated\**\*.cs" />
     <None Include="_Generated\**\*.cs" />
   </ItemGroup>
-
+  <ItemGroup Condition="'$(DesignTimeBuild)' == 'true'">
+    <None Remove="_Generated\Riok.Mapperly\**\*.cs" />
+    <Compile Include="_Generated\Riok.Mapperly\**\*.cs" Visible="true" AutoGen="true" DesignTime="true" />
+  </ItemGroup>
   <Target Name="CustomClean" AfterTargets="Clean">
     <RemoveDir Directories="_Generated" />
   </Target>
+
+  <ItemGroup>
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)CodeMetricsConfig.txt" Condition="Exists('$(MSBuildThisFileDirectory)CodeMetricsConfig.txt')" Link="CodeMetricsConfig.txt" />
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)SonarLint.xml" Condition="Exists('$(MSBuildThisFileDirectory)SonarLint.xml')" Link="SonarLint.xml" />
+  </ItemGroup>
+
+  <ItemGroup Condition="@(PackageReference->AnyHaveMetadataValue('Identity', 'Riok.Mapperly'))">
+    <Compile Include="$(MSBuildThisFileDirectory)MapperlyGlobalConfig.cs" Condition="Exists('$(MSBuildThisFileDirectory)MapperlyGlobalConfig.cs')" Link="MapperlyGlobalConfig.cs" />
+  </ItemGroup>
 
 </Project>
