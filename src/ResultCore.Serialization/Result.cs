@@ -22,6 +22,7 @@ namespace ResultCore;
 [JsonConverter(typeof(ResultConverterFactory))]
 [StructLayout(LayoutKind.Auto)]
 [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Use field in struct")]
+[DebuggerDisplay("{DisplayText}")]
 public readonly partial record struct Result<TData, TError>
     where TData : class?
     where TError : struct
@@ -88,6 +89,17 @@ public readonly partial record struct Result<TData, TError>
         this.error = error;
         hasError = true;
     }
+
+    #region Properties
+
+    [MemoryPackIgnore]
+    [IgnoreMember]
+    [JsonIgnore]
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private readonly string DisplayText =>
+                                $"HasError = {hasError}, {(hasError ? $"Error = {error}" : $"Data = {Data}")}";
+
+    #endregion
 
     #region Methods
 
@@ -213,6 +225,7 @@ public readonly partial record struct Result<TData, TError>
 [JsonConverter(typeof(ResultConverterFactory))]
 [StructLayout(LayoutKind.Sequential)]
 [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Use field in struct")]
+[DebuggerDisplay("{DisplayText}")]
 public readonly partial record struct Result<TError>
     where TError : struct
 {
@@ -274,6 +287,16 @@ public readonly partial record struct Result<TError>
         this.error = error;
         hasError = true;
     }
+
+    #region Properties
+
+    [MemoryPackIgnore]
+    [IgnoreMember]
+    [JsonIgnore]
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private readonly string DisplayText => $"HasError = {hasError}, {(hasError ? $"Error = {error}" : string.Empty)}";
+
+    #endregion
 
     #region Methods
 

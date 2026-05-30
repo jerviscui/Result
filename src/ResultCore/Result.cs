@@ -29,9 +29,6 @@ public readonly record struct Result<TData, TError>
 
     internal readonly bool hasError;
 
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string DisplayText => hasError ? $"Error: {error}" : $"Data: {Data}";
-
     /// <summary>
     /// Initializes a new instance of the <see cref="Result{TData, TError}"/> with default <typeparamref name="TError"/>.
     /// </summary>
@@ -60,6 +57,14 @@ public readonly record struct Result<TData, TError>
         this.error = error;
         hasError = true;
     }
+
+    #region Properties
+
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private readonly string DisplayText =>
+                                $"HasError = {hasError}, {(hasError ? $"Error = {error}" : $"Data = {Data}")}";
+
+    #endregion
 
     #region Methods
 
@@ -199,9 +204,6 @@ public readonly record struct Result<TError>
 
     internal readonly bool hasError;
 
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string DisplayText => hasError ? $"Error: {error}" : "Ok";
-
 #pragma warning disable IDE0060 // Remove unused parameter
     private Result(bool isOk)
 #pragma warning restore IDE0060 // Remove unused parameter
@@ -227,6 +229,13 @@ public readonly record struct Result<TError>
         this.error = error;
         hasError = true;
     }
+
+    #region Properties
+
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private readonly string DisplayText => $"HasError = {hasError}, {(hasError ? $"Error = {error}" : string.Empty)}";
+
+    #endregion
 
     #region Methods
 
