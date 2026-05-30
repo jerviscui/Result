@@ -12,6 +12,7 @@ namespace ResultCore;
 /// <typeparam name="TError">The type of the error.</typeparam>
 [StructLayout(LayoutKind.Auto)]
 [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
+[DebuggerDisplay("{DisplayText}")]
 public readonly record struct Result<TData, TError>
     where TData : class?
     where TError : struct
@@ -27,6 +28,9 @@ public readonly record struct Result<TData, TError>
     internal readonly TError error;
 
     internal readonly bool hasError;
+
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string DisplayText => hasError ? $"Error: {error}" : $"Data: {Data}";
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Result{TData, TError}"/> with default <typeparamref name="TError"/>.
@@ -174,6 +178,7 @@ public readonly record struct Result<TData, TError>
 /// <typeparam name="TError">The type of the error.</typeparam>
 [StructLayout(LayoutKind.Auto)]
 [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
+[DebuggerDisplay("{DisplayText}")]
 public readonly record struct Result<TError>
     where TError : struct
 {
@@ -193,6 +198,9 @@ public readonly record struct Result<TError>
     internal readonly TError error;
 
     internal readonly bool hasError;
+
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string DisplayText => hasError ? $"Error: {error}" : "Ok";
 
 #pragma warning disable IDE0060 // Remove unused parameter
     private Result(bool isOk)
