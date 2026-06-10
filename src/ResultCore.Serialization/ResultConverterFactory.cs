@@ -111,7 +111,7 @@ public class ResultConverter<TData, TError> : JsonConverter<Result<TData, TError
 
         TData? data = null;
         TError error = default;
-        var hasError = false;
+        bool? hasError = null;
         var dataProp = PropNames.GetDataProp(options);
         var errorProp = PropNames.GetErrorProp(options);
         var hasErrorProp = PropNames.GetHasErrorProp(options);
@@ -136,7 +136,7 @@ public class ResultConverter<TData, TError> : JsonConverter<Result<TData, TError
                 {
                     error = _errorConverter.Read(ref reader, _errorType, options);
                 }
-                else if (propertyName.SequenceEqual(hasErrorProp))
+                else if (propertyName.SequenceEqual(hasErrorProp) && reader.TokenType != JsonTokenType.Null)
                 {
                     hasError = reader.GetBoolean();
                 }
@@ -164,11 +164,16 @@ public class ResultConverter<TData, TError> : JsonConverter<Result<TData, TError
         var errorProp = PropNames.GetErrorProp(options);
         var hasErrorProp = PropNames.GetHasErrorProp(options);
 
+        var ignoreNull = options.DefaultIgnoreCondition is JsonIgnoreCondition.WhenWritingNull;
+
         writer.WriteStartObject();
 
         if (value.Data == null)
         {
-            writer.WriteNull(dataProp);
+            if (!ignoreNull)
+            {
+                writer.WriteNull(dataProp);
+            }
         }
         else
         {
@@ -179,7 +184,17 @@ public class ResultConverter<TData, TError> : JsonConverter<Result<TData, TError
         writer.WritePropertyName(errorProp);
         _errorConverter.Write(writer, value.error, options);
 
-        writer.WriteBoolean(hasErrorProp, value.hasError);
+        if (value.hasError == null)
+        {
+            if (!ignoreNull)
+            {
+                writer.WriteNull(hasErrorProp);
+            }
+        }
+        else
+        {
+            writer.WriteBoolean(hasErrorProp, value.hasError.Value);
+        }
 
         writer.WriteEndObject();
     }
@@ -210,7 +225,7 @@ public class ResultConverter<TError> : JsonConverter<Result<TError>>
         }
 
         TError error = default;
-        var hasError = false;
+        bool? hasError = null;
 
         var errorProp = PropNames.GetErrorProp(options);
         var hasErrorProp = PropNames.GetHasErrorProp(options);
@@ -231,7 +246,7 @@ public class ResultConverter<TError> : JsonConverter<Result<TError>>
                 {
                     error = _errorConverter.Read(ref reader, _errorType, options);
                 }
-                else if (propertyName.SequenceEqual(hasErrorProp))
+                else if (propertyName.SequenceEqual(hasErrorProp) && reader.TokenType != JsonTokenType.Null)
                 {
                     hasError = reader.GetBoolean();
                 }
@@ -258,12 +273,24 @@ public class ResultConverter<TError> : JsonConverter<Result<TError>>
         var errorProp = PropNames.GetErrorProp(options);
         var hasErrorProp = PropNames.GetHasErrorProp(options);
 
+        var ignoreNull = options.DefaultIgnoreCondition is JsonIgnoreCondition.WhenWritingNull;
+
         writer.WriteStartObject();
 
         writer.WritePropertyName(errorProp);
         _errorConverter.Write(writer, value.error, options);
 
-        writer.WriteBoolean(hasErrorProp, value.hasError);
+        if (value.hasError == null)
+        {
+            if (!ignoreNull)
+            {
+                writer.WriteNull(hasErrorProp);
+            }
+        }
+        else
+        {
+            writer.WriteBoolean(hasErrorProp, value.hasError.Value);
+        }
 
         writer.WriteEndObject();
     }

@@ -27,7 +27,7 @@ public readonly record struct Result<TData, TError>
     /// </summary>
     internal readonly TError error;
 
-    internal readonly bool hasError;
+    internal readonly bool? hasError;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Result{TData, TError}"/> with default <typeparamref name="TError"/>.
@@ -62,7 +62,7 @@ public readonly record struct Result<TData, TError>
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private readonly string DisplayText =>
-                                $"HasError = {hasError}, {(hasError ? $"Error = {error}" : $"Data = {Data}")}";
+                                $"HasError = {hasError}, {((hasError ?? false) ? $"Error = {error}" : $"Data = {Data}")}";
 
     #endregion
 
@@ -72,15 +72,15 @@ public readonly record struct Result<TData, TError>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal ref readonly TError GetErrorRefUnsafe()
     {
-        Debug.Assert(hasError, $"{nameof(hasError)} is true");
+        Debug.Assert(IsError(), $"{nameof(hasError)} is true");
         return ref error;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Deconstruct(out bool isError, out TError error, out TData? data)
     {
-        isError = hasError;
-        if (hasError)
+        isError = IsError();
+        if (isError)
         {
             error = this.error;
             data = null;
@@ -98,11 +98,17 @@ public readonly record struct Result<TData, TError>
     /// <returns>
     /// <c>true</c> if this instance is error; otherwise <c>false</c>.
     /// </returns>
+    /// <exception cref="NotInitializeException">Result is default</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     [MemberNotNullWhen(false, nameof(Data))]
     public readonly bool IsError()
     {
-        return hasError;
+        if (hasError is null)
+        {
+            throw new NotInitializeException("Result is default");
+        }
+
+        return hasError.Value;
     }
 
     /// <summary>
@@ -118,7 +124,7 @@ public readonly record struct Result<TData, TError>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool IsError([NotNullWhen(true)] out TError? error)
     {
-        if (hasError)
+        if (IsError())
         {
             error = this.error;
             return true;
@@ -143,7 +149,7 @@ public readonly record struct Result<TData, TError>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool IsError([NotNullWhen(true)] out TError? error, [NotNullWhen(false)] out TData? data)
     {
-        if (hasError)
+        if (IsError())
         {
             error = this.error;
             data = null;
@@ -202,7 +208,7 @@ public readonly record struct Result<TError>
     /// </summary>
     internal readonly TError error;
 
-    internal readonly bool hasError;
+    internal readonly bool? hasError;
 
 #pragma warning disable IDE0060 // Remove unused parameter
     private Result(bool isOk)
@@ -233,7 +239,10 @@ public readonly record struct Result<TError>
     #region Properties
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private readonly string DisplayText => $"HasError = {hasError}, {(hasError ? $"Error = {error}" : string.Empty)}";
+    private readonly string DisplayText =>
+                                (hasError ?? false)
+                                    ? $"HasError = {hasError}, Error = {error}"
+                                    : $"HasError = {hasError}";
 
     #endregion
 
@@ -243,7 +252,7 @@ public readonly record struct Result<TError>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal ref readonly TError GetErrorRefUnsafe()
     {
-        Debug.Assert(hasError, $"{nameof(hasError)} is true");
+        Debug.Assert(IsError(), $"{nameof(hasError)} is true");
         return ref error;
     }
 
@@ -253,10 +262,16 @@ public readonly record struct Result<TError>
     /// <returns>
     /// <c>true</c> if this instance is error; otherwise <c>false</c>.
     /// </returns>
+    /// <exception cref="NotInitializeException">Result is default</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool IsError()
     {
-        return hasError;
+        if (hasError is null)
+        {
+            throw new NotInitializeException("Result is default");
+        }
+
+        return hasError.Value;
     }
 
     /// <summary>
@@ -272,7 +287,7 @@ public readonly record struct Result<TError>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool IsError([NotNullWhen(true)] out TError? error)
     {
-        if (hasError)
+        if (IsError())
         {
             error = this.error;
             return true;

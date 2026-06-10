@@ -16,7 +16,7 @@ public static class ResultExtensions
         where TData : class?
         where TError : struct
     {
-        if (!result.hasError)
+        if (!(result.hasError ?? false))
         {
 #pragma warning disable CA2201 // Do not raise reserved exception types
             throw new InvalidOperationException("No have Error.");
@@ -34,7 +34,7 @@ public static class ResultExtensions
     public static ref readonly TError GetErrorRef<TError>(this in Result<TError> result)
         where TError : struct
     {
-        if (!result.hasError)
+        if (!(result.hasError ?? false))
         {
 #pragma warning disable CA2201 // Do not raise reserved exception types
             throw new InvalidOperationException("No have Error.");

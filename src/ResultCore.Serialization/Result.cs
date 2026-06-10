@@ -48,12 +48,12 @@ public readonly partial record struct Result<TData, TError>
     [MemoryPackOrder(1)]
     [Id(1)]
     [Key(1)]
-    internal readonly bool hasError;
+    internal readonly bool? hasError;
 
     [MemoryPackConstructor]
     [OrleansConstructor]
     [SerializationConstructor]
-    internal Result(TError error, bool hasError, TData? data)
+    internal Result(TError error, bool? hasError, TData? data)
     {
         // just use for Serialize
         this.error = error;
@@ -97,7 +97,7 @@ public readonly partial record struct Result<TData, TError>
     [JsonIgnore]
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private readonly string DisplayText =>
-                                $"HasError = {hasError}, {(hasError ? $"Error = {error}" : $"Data = {Data}")}";
+                                $"HasError = {hasError}, {((hasError ?? false) ? $"Error = {error}" : $"Data = {Data}")}";
 
     #endregion
 
@@ -107,15 +107,15 @@ public readonly partial record struct Result<TData, TError>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal ref readonly TError GetErrorRefUnsafe()
     {
-        Debug.Assert(hasError, $"{nameof(hasError)} is true");
+        Debug.Assert(IsError(), $"{nameof(hasError)} is true");
         return ref error;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Deconstruct(out bool isError, out TError error, out TData? data)
     {
-        isError = hasError;
-        if (hasError)
+        isError = IsError();
+        if (isError)
         {
             error = this.error;
             data = null;
@@ -133,11 +133,17 @@ public readonly partial record struct Result<TData, TError>
     /// <returns>
     /// <c>true</c> if this instance is error; otherwise <c>false</c>.
     /// </returns>
+    /// <exception cref="NotInitializeException">Result is default</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     [MemberNotNullWhen(false, nameof(Data))]
     public readonly bool IsError()
     {
-        return hasError;
+        if (hasError is null)
+        {
+            throw new NotInitializeException("Result is default");
+        }
+
+        return hasError.Value;
     }
 
     /// <summary>
@@ -154,7 +160,7 @@ public readonly partial record struct Result<TData, TError>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool IsError([NotNullWhen(true)] out TError? error)
     {
-        if (hasError)
+        if (IsError())
         {
             error = this.error;
             return true;
@@ -179,7 +185,7 @@ public readonly partial record struct Result<TData, TError>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool IsError([NotNullWhen(true)] out TError? error, [NotNullWhen(false)] out TData? data)
     {
-        if (hasError)
+        if (IsError())
         {
             error = this.error;
             data = null;
@@ -252,7 +258,7 @@ public readonly partial record struct Result<TError>
     [MemoryPackOrder(1)]
     [Id(1)]
     [Key(1)]
-    internal readonly bool hasError;
+    internal readonly bool? hasError;
 
     private Result(bool _)
     {
@@ -263,7 +269,7 @@ public readonly partial record struct Result<TError>
     [MemoryPackConstructor]
     [OrleansConstructor]
     [SerializationConstructor]
-    internal Result(TError error, bool hasError)
+    internal Result(TError error, bool? hasError)
     {
         // just use for Serialize
         this.error = error;
@@ -294,7 +300,10 @@ public readonly partial record struct Result<TError>
     [IgnoreMember]
     [JsonIgnore]
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private readonly string DisplayText => $"HasError = {hasError}, {(hasError ? $"Error = {error}" : string.Empty)}";
+    private readonly string DisplayText =>
+                                (hasError ?? false)
+                                    ? $"HasError = {hasError}, Error = {error}"
+                                    : $"HasError = {hasError}";
 
     #endregion
 
@@ -304,7 +313,7 @@ public readonly partial record struct Result<TError>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal ref readonly TError GetErrorRefUnsafe()
     {
-        Debug.Assert(hasError, $"{nameof(hasError)} is true");
+        Debug.Assert(IsError(), $"{nameof(hasError)} is true");
         return ref error;
     }
 
@@ -314,10 +323,16 @@ public readonly partial record struct Result<TError>
     /// <returns>
     /// <c>true</c> if this instance is error; otherwise <c>false</c>.
     /// </returns>
+    /// <exception cref="NotInitializeException">Result is default</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool IsError()
     {
-        return hasError;
+        if (hasError is null)
+        {
+            throw new NotInitializeException("Result is default");
+        }
+
+        return hasError.Value;
     }
 
     /// <summary>
@@ -334,7 +349,7 @@ public readonly partial record struct Result<TError>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool IsError([NotNullWhen(true)] out TError? error)
     {
-        if (hasError)
+        if (IsError())
         {
             error = this.error;
             return true;
