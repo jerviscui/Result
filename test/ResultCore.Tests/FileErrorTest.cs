@@ -31,6 +31,8 @@ public class FileErrorTest
         //|==========================================================|
 
         var r2 = BaseError.Result(BaseErrorCode.NotFound);
+        //var layout = TypeLayout.GetLayout(r2.GetType());
+        //Console.WriteLine(layout.ToString(true));
         TypeLayout.PrintLayout(r2.GetType(), true);
         //Type layout for 'Result`1'
         //Size: 32 bytes. Paddings: 11 bytes (%34 of empty space)
@@ -160,6 +162,16 @@ public class FileErrorTest
     }
 
     #endregion
+
+    private readonly ITestOutputHelper _output;
+
+    public FileErrorTest(ITestOutputHelper output)
+    {
+        _output = output;
+
+        using var writer = new XunitTextWriter(_output);
+        Console.SetOut(writer);
+    }
 
     #region Methods
 
