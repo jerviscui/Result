@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
@@ -38,10 +38,10 @@
 
   <ItemGroup>
     <PackageReference Include="MemoryPack" Version="1.21.4" />
-    <PackageReference Include="MessagePack" Version="3.1.6" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.16" />
-    <PackageReference Include="Microsoft.Orleans.Serialization" Version="9.2.1" />
-    <PackageReference Include="System.Text.Json" Version="9.0.16" />
+    <PackageReference Include="MessagePack" Version="3.1.7" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.9" />
+    <PackageReference Include="Microsoft.Orleans.Serialization" Version="10.2.1" />
+    <PackageReference Include="System.Text.Json" Version="10.0.9" />
   </ItemGroup>
 
 </Project>

@@ -98,6 +98,16 @@ public class ResultTest
     #region Methods
 
     [Fact]
+    public void ImplicitConversion_FromOkResult_Should_Remain_Success()
+    {
+        Result<BaseError> ok = Result.Ok;
+
+        Result<MyData, BaseError> converted = ok;
+
+        converted.IsError().ShouldBeFalse();
+    }
+
+    [Fact]
     public void Result_Test()
     {
         var result = Return_Result_Error_Test();

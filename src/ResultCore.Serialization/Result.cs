@@ -51,7 +51,6 @@ public readonly partial record struct Result<TData, TError>
     internal readonly bool? hasError;
 
     [MemoryPackConstructor]
-    [OrleansConstructor]
     [SerializationConstructor]
     internal Result(TError error, bool? hasError, TData? data)
     {
@@ -202,7 +201,9 @@ public readonly partial record struct Result<TData, TError>
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static implicit operator Result<TData, TError>(in Result<TError> result) =>
-                                        new(in result.GetErrorRefUnsafe());
+                                        result.IsError()
+                                            ? new(in result.GetErrorRefUnsafe())
+                                            : new(default!);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static implicit operator Result<TData, TError>(TData data) => new(data);
@@ -267,7 +268,6 @@ public readonly partial record struct Result<TError>
     }
 
     [MemoryPackConstructor]
-    [OrleansConstructor]
     [SerializationConstructor]
     internal Result(TError error, bool? hasError)
     {
