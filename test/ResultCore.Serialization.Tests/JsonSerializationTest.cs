@@ -93,6 +93,35 @@ public class JsonSerializationTest
     }
 
     [Fact]
+    public void Deserialize_Should_Leave_Result_Uninitialized_When_HasError_Is_Missing()
+    {
+        const string json = """{"data":{"name":"aaa"},"error":{"code":0}}""";
+
+        var result = JsonSerializer.Deserialize<Result<MyData, FileError>>(json, _options);
+
+        Should.Throw<NotInitializeException>(() => result.IsError());
+    }
+
+    [Fact]
+    public void Deserialize_Should_Skip_Unknown_Properties()
+    {
+        const string json = """
+                            {
+                              "trace": { "id": "abc", "items": [1, 2, 3] },
+                              "hasError": false,
+                              "data": { "name": "aaa" },
+                              "error": { "code": 0 }
+                            }
+                            """;
+
+        var result = JsonSerializer.Deserialize<Result<MyData, FileError>>(json, _options);
+
+        result.IsError().ShouldBeFalse();
+        result.Data.ShouldNotBeNull();
+        result.Data.Name.ShouldBe("aaa");
+    }
+
+    [Fact]
     public void Deserialize_Should_Support_MultiSegment_PropertyNames()
     {
         var jsonSequence = CreateMultiSegmentSequence(
@@ -107,14 +136,6 @@ public class JsonSerializationTest
         result.IsError().ShouldBeFalse();
         result.Data.ShouldNotBeNull();
         result.Data.Name.ShouldBe("aaa");
-    }
-
-    [Fact]
-    public void Deserialize_Should_Throw_When_HasError_Is_Missing()
-    {
-        const string json = """{"data":{"name":"aaa"},"error":{"code":0}}""";
-
-        Should.Throw<JsonException>(() => JsonSerializer.Deserialize<Result<MyData, FileError>>(json, _options));
     }
 
     [Fact]

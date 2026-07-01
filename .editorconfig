@@ -1753,6 +1753,9 @@ dotnet_diagnostic.S2933.severity = none
 # Exceptions should not be explicitly rethrown
 dotnet_diagnostic.S3445.severity = none
 
+# Do not raise exceptions in unexpected locations, duplicate with CA1065
+dotnet_diagnostic.S3877.severity = none
+
 # Overloads with a "CultureInfo" or an "IFormatProvider" parameter should be used
 dotnet_diagnostic.S4056.severity = none
 

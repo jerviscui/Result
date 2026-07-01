@@ -10,11 +10,11 @@ public class ResultTest
     private static Result<BaseError> Return_Result_Error_Test()
     {
         // way 1
-        var result1 = new Result<BaseError>(BaseErrorCode.NotFound);
+        _ = new Result<BaseError>(BaseErrorCode.NotFound);
         // way 2
-        var result2 = new Result<BaseError>(new BaseError(BaseErrorCode.NotFound));
+        _ = new Result<BaseError>(new BaseError(BaseErrorCode.NotFound));
         // way 3
-        var result3 = BaseError.Result(BaseErrorCode.NotFound);
+        _ = BaseError.Result(BaseErrorCode.NotFound);
         // way 4
         BaseError result = BaseErrorCode.NotFound;
 
@@ -29,11 +29,11 @@ public class ResultTest
     private static Result<MyData, BaseError> Return_ResultData_Error_Test()
     {
         // way 1
-        var result1 = new Result<BaseError>(BaseErrorCode.NotFound);
+        _ = new Result<BaseError>(BaseErrorCode.NotFound);
         // way 2
-        var result2 = new Result<BaseError>(new BaseError(BaseErrorCode.NotFound));
+        _ = new Result<BaseError>(new BaseError(BaseErrorCode.NotFound));
         // way 3
-        var result3 = BaseError.Result(BaseErrorCode.NotFound);
+        _ = BaseError.Result(BaseErrorCode.NotFound);
         // way 4
         BaseError result = BaseErrorCode.NotFound;
 
@@ -48,9 +48,9 @@ public class ResultTest
     private static Task<Result<BaseError>> Return_Task_Result_Error_TestAsync()
     {
         // way 1
-        var result1 = new Result<BaseError>(BaseErrorCode.NotFound);
+        _ = new Result<BaseError>(BaseErrorCode.NotFound);
         // way 2
-        var result2 = new Result<BaseError>(new BaseError(BaseErrorCode.NotFound));
+        _ = new Result<BaseError>(new BaseError(BaseErrorCode.NotFound));
         // way 3
         var result3 = BaseError.Result(BaseErrorCode.NotFound);
 
@@ -60,9 +60,9 @@ public class ResultTest
     private static Task<Result<BaseError>> Return_Task_Result_Ok_TestAsync()
     {
         // way 1
-        var result = BaseError.Result(BaseErrorCode.NotFound);
+        _ = BaseError.Result(BaseErrorCode.NotFound);
         //do sth.
-        result = Result.Ok;
+        Result<BaseError> result = Result.Ok;
         return result;
 
         // way 2
@@ -83,9 +83,9 @@ public class ResultTest
     private static Task<Result<MyData, BaseError>> Return_Task_ResultData_Ok_TestAsync()
     {
         // way 1
-        Result<MyData, BaseError> result1 = BaseError.Result(BaseErrorCode.NotFound);
+        _ = BaseError.Result(BaseErrorCode.NotFound);
         //do sth.
-        result1 = new MyData("test");
+        Result<MyData, BaseError> result1 = new MyData("test");
         return result1;
 
         // way 2
@@ -98,13 +98,20 @@ public class ResultTest
     #region Methods
 
     [Fact]
-    public void ImplicitConversion_FromOkResult_Should_Remain_Success()
+    public void ImplicitConversion_FromOkResult_Should_Throw()
     {
         Result<BaseError> ok = Result.Ok;
 
-        Result<MyData, BaseError> converted = ok;
+        _ = Should.Throw<InvalidOperationException>(
+            () =>
+            {
+                _ = Convert(ok);
+            });
 
-        converted.IsError().ShouldBeFalse();
+        static Result<MyData, BaseError> Convert(Result<BaseError> result)
+        {
+            return result;
+        }
     }
 
     [Fact]

@@ -165,8 +165,12 @@ public readonly record struct Result<TData, TError>
     #endregion
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "")]
     public static implicit operator Result<TData, TError>(in Result<TError> result) =>
-                                        result.IsError() ? new(in result.GetErrorRefUnsafe()) : new(default!);
+                                        result.IsError()
+                                            ? new(in result.GetErrorRefUnsafe())
+                                            : throw new InvalidOperationException(
+            "Result.Ok cannot be converted to Result<TData, TError>.");
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static implicit operator Result<TData, TError>(TData data) => new(data);

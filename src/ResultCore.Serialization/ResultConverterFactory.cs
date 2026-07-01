@@ -55,8 +55,11 @@ internal static class PropNames
 
     #region Constants & Statics
 
+    // Result<object, int>.Data
     private const string DataProp = "Data";
+    // Result<object, int>.error
     private const string ErrorProp = "Error";
+    // Result<object, int>.hasError
     private const string HasErrorProp = "HasError";
 
     internal static PropertyNameMatcher CreateDataMatcher(JsonSerializerOptions options)
@@ -128,10 +131,41 @@ internal static class PropNames
     }
 }
 
+internal enum ResultProperty
+{
+    Unknown,
+    Data,
+    Error,
+    HasError
+}
+
+internal static class JsonExceptionMessages
+{
+
+    #region Constants & Statics
+
+    internal const string ExpectedObject = "Expected JSON object for Result.";
+    internal const string InvalidResultJson = "Invalid Result JSON.";
+    internal const string UnexpectedPropertyState = "Unexpected Result property state.";
+
+    #endregion
+
+}
+
 public class ResultConverter<TData, TError> : JsonConverter<Result<TData, TError>>
     where TData : class?
     where TError : struct
 {
+
+    #region Constants & Statics
+
+    private static bool? ReadHasError(ref Utf8JsonReader reader)
+    {
+        return reader.TokenType == JsonTokenType.Null ? null : reader.GetBoolean();
+    }
+
+    #endregion
+
     private readonly JsonConverter<TData> _dataConverter;
     private readonly JsonConverter<TError> _errorConverter;
     private readonly PropNames.PropertyNameMatcher _dataPropMatcher;
@@ -153,6 +187,21 @@ public class ResultConverter<TData, TError> : JsonConverter<Result<TData, TError
 
     #region Methods
 
+    private ResultProperty GetProperty(ref Utf8JsonReader reader)
+    {
+        if (_dataPropMatcher.IsMatch(ref reader))
+        {
+            return ResultProperty.Data;
+        }
+
+        if (_errorPropMatcher.IsMatch(ref reader))
+        {
+            return ResultProperty.Error;
+        }
+
+        return _hasErrorPropMatcher.IsMatch(ref reader) ? ResultProperty.HasError : ResultProperty.Unknown;
+    }
+
     public override Result<TData, TError> Read(
         ref Utf8JsonReader reader,
         Type typeToConvert,
@@ -160,7 +209,7 @@ public class ResultConverter<TData, TError> : JsonConverter<Result<TData, TError
     {
         if (reader.TokenType != JsonTokenType.StartObject)
         {
-            throw new JsonException("Read failed.");
+            throw new JsonException(JsonExceptionMessages.ExpectedObject);
         }
 
         TData? data = null;
@@ -171,39 +220,37 @@ public class ResultConverter<TData, TError> : JsonConverter<Result<TData, TError
         {
             if (reader.TokenType == JsonTokenType.PropertyName)
             {
-                var isData = _dataPropMatcher.IsMatch(ref reader);
-                var isError = _errorPropMatcher.IsMatch(ref reader);
-                var isHasError = _hasErrorPropMatcher.IsMatch(ref reader);
+                var property = GetProperty(ref reader);
 
                 if (!reader.Read())
                 {
                     break;
                 }
 
-                if (isData)
+                switch (property)
                 {
-                    data = _dataConverter.Read(ref reader, _dataType, options);
-                }
-                else if (isError)
-                {
-                    error = _errorConverter.Read(ref reader, _errorType, options);
-                }
-                else if (isHasError && reader.TokenType != JsonTokenType.Null)
-                {
-                    hasError = reader.GetBoolean();
-                }
-                else
-                {
-                    reader.Skip();
+                    case ResultProperty.Data:
+                        data = _dataConverter.Read(ref reader, _dataType, options);
+                        break;
+
+                    case ResultProperty.Error:
+                        error = _errorConverter.Read(ref reader, _errorType, options);
+                        break;
+
+                    case ResultProperty.HasError:
+                        hasError = ReadHasError(ref reader);
+                        break;
+
+                    case ResultProperty.Unknown:
+                        reader.Skip();
+                        break;
+
+                    default:
+                        throw new JsonException(JsonExceptionMessages.UnexpectedPropertyState);
                 }
             }
             else if (reader.TokenType == JsonTokenType.EndObject)
             {
-                if (hasError is null)
-                {
-                    throw new JsonException("Missing required HasError property.");
-                }
-
                 return new Result<TData, TError>(error, hasError, data);
             }
             else
@@ -212,7 +259,7 @@ public class ResultConverter<TData, TError> : JsonConverter<Result<TData, TError
             }
         }
 
-        throw new JsonException("Read failed.");
+        throw new JsonException(JsonExceptionMessages.InvalidResultJson);
     }
 
     public override void Write(Utf8JsonWriter writer, Result<TData, TError> value, JsonSerializerOptions options)
@@ -259,6 +306,16 @@ public class ResultConverter<TData, TError> : JsonConverter<Result<TData, TError
 public class ResultConverter<TError> : JsonConverter<Result<TError>>
     where TError : struct
 {
+
+    #region Constants & Statics
+
+    private static bool? ReadHasError(ref Utf8JsonReader reader)
+    {
+        return reader.TokenType == JsonTokenType.Null ? null : reader.GetBoolean();
+    }
+
+    #endregion
+
     private readonly JsonConverter<TError> _errorConverter;
     private readonly PropNames.PropertyNameMatcher _errorPropMatcher;
     private readonly PropNames.PropertyNameMatcher _hasErrorPropMatcher;
@@ -274,11 +331,21 @@ public class ResultConverter<TError> : JsonConverter<Result<TError>>
 
     #region Methods
 
+    private ResultProperty GetProperty(ref Utf8JsonReader reader)
+    {
+        if (_errorPropMatcher.IsMatch(ref reader))
+        {
+            return ResultProperty.Error;
+        }
+
+        return _hasErrorPropMatcher.IsMatch(ref reader) ? ResultProperty.HasError : ResultProperty.Unknown;
+    }
+
     public override Result<TError> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType != JsonTokenType.StartObject)
         {
-            throw new JsonException("Read failed.");
+            throw new JsonException(JsonExceptionMessages.ExpectedObject);
         }
 
         TError error = default;
@@ -288,34 +355,34 @@ public class ResultConverter<TError> : JsonConverter<Result<TError>>
         {
             if (reader.TokenType == JsonTokenType.PropertyName)
             {
-                var isError = _errorPropMatcher.IsMatch(ref reader);
-                var isHasError = _hasErrorPropMatcher.IsMatch(ref reader);
+                var property = GetProperty(ref reader);
 
                 if (!reader.Read())
                 {
                     break;
                 }
 
-                if (isError)
+                switch (property)
                 {
-                    error = _errorConverter.Read(ref reader, _errorType, options);
-                }
-                else if (isHasError && reader.TokenType != JsonTokenType.Null)
-                {
-                    hasError = reader.GetBoolean();
-                }
-                else
-                {
-                    reader.Skip();
+                    case ResultProperty.Error:
+                        error = _errorConverter.Read(ref reader, _errorType, options);
+                        break;
+
+                    case ResultProperty.HasError:
+                        hasError = ReadHasError(ref reader);
+                        break;
+
+                    case ResultProperty.Unknown:
+                        reader.Skip();
+                        break;
+
+                    case ResultProperty.Data:
+                    default:
+                        throw new JsonException(JsonExceptionMessages.UnexpectedPropertyState);
                 }
             }
             else if (reader.TokenType == JsonTokenType.EndObject)
             {
-                if (hasError is null)
-                {
-                    throw new JsonException("Missing required HasError property.");
-                }
-
                 return new Result<TError>(error, hasError);
             }
             else
@@ -324,7 +391,7 @@ public class ResultConverter<TError> : JsonConverter<Result<TError>>
             }
         }
 
-        throw new JsonException("Read failed.");
+        throw new JsonException(JsonExceptionMessages.InvalidResultJson);
     }
 
     public override void Write(Utf8JsonWriter writer, Result<TError> value, JsonSerializerOptions options)
